@@ -1,29 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Kamera Browser</title>
-</head>
 <body>
 
-<video id="kamera" autoplay playsinline></video>
+<video id="video" autoplay playsinline width="300"></video>
+<br><br>
+<button onclick="gantiKamera()">Ganti Kamera</button>
 
 <script>
-async function bukaKamera() {
+let currentMode = "user";
+let stream;
+
+async function bukaKamera(mode) {
+
+  // Matikan kamera sebelumnya
+  if (stream) {
+    stream.getTracks().forEach(track => track.stop());
+  }
+
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: mode
+      },
       audio: false
     });
 
-    const video = document.getElementById("kamera");
-    video.srcObject = stream;
+    document.getElementById("video").srcObject = stream;
 
-  } catch (error) {
-    console.log("Kamera gagal dibuka:", error);
+  } catch (err) {
+    console.log(err);
   }
 }
 
-bukaKamera();
+function gantiKamera() {
+  currentMode =
+    currentMode === "user"
+      ? "environment"
+      : "user";
+
+  bukaKamera(currentMode);
+}
+
+// Pertama buka kamera depan
+bukaKamera(currentMode);
 </script>
 
 </body>
