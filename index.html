@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kamera Browser</title>
+</head>
+<body>
+
+<video id="kamera" autoplay playsinline></video>
+
+<script>
+async function bukaKamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false
+    });
+
+    const video = document.getElementById("kamera");
+    video.srcObject = stream;
+
+  } catch (error) {
+    console.log("Kamera gagal dibuka:", error);
+  }
+}
+
+bukaKamera();
+</script>
+
+</body>
+</html>
