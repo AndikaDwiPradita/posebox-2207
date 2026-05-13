@@ -1,49 +1,48 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<body>
-
-<video id="video" autoplay playsinline width="300"></video>
-<br><br>
-<button onclick="gantiKamera()">Ganti Kamera</button>
-
-<script>
-let currentMode = "user";
-let stream;
-
-async function bukaKamera(mode) {
-
-  // Matikan kamera sebelumnya
-  if (stream) {
-    stream.getTracks().forEach(track => track.stop());
-  }
-
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: mode
-      },
-      audio: false
-    });
-
-    document.getElementById("video").srcObject = stream;
-
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-function gantiKamera() {
-  currentMode =
-    currentMode === "user"
-      ? "environment"
-      : "user";
-
-  bukaKamera(currentMode);
-}
-
-// Pertama buka kamera depan
-bukaKamera(currentMode);
-</script>
-
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pose Box</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body>
+    <nav class="navbar">
+      <h1 class="logo">Pose<span>Box</span></h1>
+    </nav>
+    
+    <section class="posebox">
+      <div class="timer">
+        <h3 id="s3"><i class="fa-solid fa-stopwatch"></i> 3s</h3>
+        <h3 id="s5"><i class="fa-solid fa-stopwatch"></i> 5s</h3>
+        <h3 id="s10"><i class="fa-solid fa-stopwatch"></i> 10s</h3>
+      </div>
+      
+      <div class="kamera">
+        <video id="video" autoplay playsinline width="300"></video>
+        <div class="tombol">
+          <button onclick="settings"><i class="fa-solid fa-gear"></i></button>
+          <button onclick="takeFoto()"><i class="fa-solid fa-camera"></i></button>
+          <button onclick="gantiKamera()"><i class="fa-solid fa-camera-rotate"></i></button>
+        </div>
+      </div>
+      
+      <div class="fitur">
+        <div class="bingkai">
+          <i class="fa-solid fa-border-all"></i>
+          <p>Bingkai</p>
+        </div>
+        <div class="efek">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <p>Efek</p>
+        </div>
+        <div class="theme">
+          <i class="fa-solid fa-palette"></i>
+          <p>Tema</p>
+        </div>
+      </div>
+    </section>
+  </body>
 </html>
