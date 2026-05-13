@@ -13,8 +13,9 @@
 }
 
 .posebox {
-  margin-top: 30px;
+  max-width: fit-content;
   padding: 20px 0px;
+  margin: 30px auto;
   border: 1px solid black;
   border-radius: 12px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
@@ -42,8 +43,7 @@
   justify-content: center;
   font-size: 1.5rem;
   border: 1px solid transparent;
-  gap: 3rem;
-  margin-top:5px;
+  gap: 1rem;
 }
 
 .timer #s3, #s5, #s10 {
@@ -59,7 +59,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 30px;
+  max-width: fit-content;
+  margin: auto;
   border: 1px solid black;
   border-radius: 12px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
@@ -75,9 +76,23 @@
   font-size: 1.2rem;
   width: fit-content;
   border: 1px solid black;
-  padding: 10px 10px;
-  margin: 10px auto;
+  padding: 10px;
+  margin: 10px ;
   border-radius: 12px;
+  background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
+  backdrop-filter: blur(12px); /* efek blur */
+  -webkit-backdrop-filter: blur(12px); /* untuk Safari */
+}
+
+.hasil {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  max-width: fit-content;
+  margin: auto;
+  padding: 15px 60px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
   backdrop-filter: blur(12px); /* efek blur */
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
