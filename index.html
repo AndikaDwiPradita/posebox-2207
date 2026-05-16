@@ -13,45 +13,42 @@
       <h1 class="logo">Pose<span>Box</span></h1>
     </nav>
     
-    <main class="posebox">
-      <section class="content-wrapper">
-        <div class="timer">
+    <main>
+      <div class="content-wrapper">
+        <div class="posebox">
+          <h1>Jepretkan Momen Mu</h1>
+          <section class="timer">
           <button id="s3"><i class="fa-solid fa-stopwatch"></i> 3s</button>
           <button id="s5"><i class="fa-solid fa-stopwatch"></i> 5s</button>
           <button id="s10"><i class="fa-solid fa-stopwatch"></i> 10s</button>
-        </div>
+          </section>
         
-        <div class="kamera">
-          <video id="video" autoplay playsinline width="300"></video>
-          <div class="tombol">
-            <button onclick="settings()"><i class="fa-solid fa-gear"></i></button>
-            <button onclick="takeFoto()"><i class="fa-solid fa-camera"></i></button>
-            <button onclick="gantiKamera()"><i class="fa-solid fa-camera-rotate"></i></button>
-          </div>
+          <section class="kamera">
+            <video id="video" autoplay playsinline width="300"></video>
+            <div class="tombol">
+              <button onclick="settings()"><i class="fa-solid fa-gear"></i></button>
+              <button onclick="takeFoto()"><i class="fa-solid fa-camera"></i></button>
+              <button onclick="gantiKamera()"><i class="fa-solid fa-camera-rotate"></i></button>
+            </div>
+          </section>
+          
+          <section class="fitur">
+            <div class="button-fitur">
+              <button><i class="fa-solid fa-border-all"></i><p>Bingkai</p></button>
+              <button><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
+              <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
+            </div>
+          </section>
         </div>
-        
-        <div class="fitur">
-          <div class="bingkai">
-            <i class="fa-solid fa-border-all"></i>
-            <p>Bingkai</p>
-          </div>
-          <div class="efek">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <p>Efek</p>
-          </div>
-          <div class="theme">
-            <i class="fa-solid fa-palette"></i>
-            <p>Tema</p>
-          </div>
-        </div>
-      </section>
-    </main>
+      </div>
+    
     
 
-    <aside class="hasil">
-      <section class="foto">
-        <h1>Hasil Jepret</h1>
-      </section>
-    </aside>
+      <aside>
+        <div class="aside-wrapper">
+          <h1>Hasil Jepret</h1>
+        </div>
+      </aside>
+    </main>
   </body>
 </html>

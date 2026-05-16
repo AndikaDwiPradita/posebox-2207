@@ -1,8 +1,22 @@
 * {
-  padding: 0;
-  margin: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* ========================================
+   BODY STYLING
+======================================== */
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    min-height: 100vh;
+}
+
+/* ========================================
+  Navigation Bar
+======================================== */
 .navbar {
   padding: 20px;
   background-color: pink;
@@ -12,10 +26,32 @@
   color: white;
 }
 
+/* ========================================
+   Main Layouting
+======================================== */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    gap: 2rem;
+}
+
+.content-wrapper {
+    flex: 1 1 65%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* ========================================
+   PoseBox Content
+======================================== */
 .posebox {
-  max-width: fit-content;
+  text-align: center;
   padding: 20px 0px;
-  margin: 30px auto;
   border: 1px solid black;
   border-radius: 12px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
@@ -23,6 +59,27 @@
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
 
+/* Timer Section */
+.timer {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  border: 1px solid transparent;
+  gap: 3rem;
+  margin-top:5px;
+}
+
+.timer #s3, #s5, #s10 {
+  border: 1px solid black;
+  font-size: 1.8rem;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
+  backdrop-filter: blur(12px); /* efek blur */
+  -webkit-backdrop-filter: blur(12px); /* untuk Safari */
+}
+
+/* Kamera Section */
 .kamera {
   display: flex;
   flex-direction: column;
@@ -36,31 +93,16 @@
   padding: 5px;
   margin-top: 15px;
   gap: 30px;
-}
-
-.timer {
-  display: flex;
-  justify-content: center;
-  font-size: 1.5rem;
-  border: 1px solid transparent;
-  gap: 1rem;
-}
-
-.timer #s3, #s5, #s10 {
-  border: 1px solid black;
-  padding: 5px 10px;
-  border-radius: 12px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
   backdrop-filter: blur(12px); /* efek blur */
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
 
+/* Fitur Section */
 .fitur {
   display: flex;
   justify-content: center;
-  align-items: center;
-  max-width: fit-content;
-  margin: auto;
+  margin: 0 30px;
   border: 1px solid black;
   border-radius: 12px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
@@ -68,32 +110,31 @@
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
 
-.bingkai, .efek, .theme {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  width: fit-content;
+.fitur button {
+  font-size: 1.5rem;
   border: 1px solid black;
+  border-radius: 12px;
   padding: 10px;
-  margin: 10px ;
-  border-radius: 12px;
+  margin: 10px 10px;
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
   backdrop-filter: blur(12px); /* efek blur */
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
 
-.hasil {
+/* ========================================
+   Hasil Jepret
+======================================== */
+aside {
+    flex: 1 1 30%;
+    min-width: 280px;
+    max-width: 400px;
+    border: 1px solid black;
+    border-radius: 12px;
+    background: rgba(128, 128, 128, 0.2);
+}
+
+.aside-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
-  border-radius: 10px;
-  max-width: fit-content;
-  margin: auto;
-  padding: 15px 60px;
-  background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
-  backdrop-filter: blur(12px); /* efek blur */
-  -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
