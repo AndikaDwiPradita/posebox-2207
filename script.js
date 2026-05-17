@@ -1,5 +1,7 @@
 let stream;
-let currentMode = "user"; // kamera depan default
+let currentMode = "user";
+
+const video = document.getElementById("video");
 
 async function bukaKamera(mode) {
 
@@ -9,6 +11,7 @@ async function bukaKamera(mode) {
   }
 
   try {
+
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: mode
@@ -16,14 +19,22 @@ async function bukaKamera(mode) {
       audio: false
     });
 
-    document.getElementById("video").srcObject = stream;
+    video.srcObject = stream;
+
+    await video.play();
+
+    console.log("Kamera berhasil aktif");
 
   } catch (err) {
-    console.log("Error kamera:", err);
+
+    console.log("ERROR:", err);
+    alert(err.message);
+
   }
 }
 
 function gantiKamera() {
+
   currentMode =
     currentMode === "user"
       ? "environment"
@@ -32,13 +43,12 @@ function gantiKamera() {
   bukaKamera(currentMode);
 }
 
-// Pertama buka kamera depan
-bukaKamera(currentMode);
-
 function settings() {
   alert("Settings");
 }
 
 function takeFoto() {
-  alert("Foto diambil");
+  alert("Foto");
 }
+
+bukaKamera(currentMode);
