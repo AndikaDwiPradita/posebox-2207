@@ -1,4 +1,5 @@
 let stream;
+let currentMode = "user"; // kamera depan default
 
 async function bukaKamera(mode) {
 
@@ -18,7 +19,7 @@ async function bukaKamera(mode) {
     document.getElementById("video").srcObject = stream;
 
   } catch (err) {
-    console.log(err);
+    console.log("Error kamera:", err);
   }
 }
 
@@ -33,3 +34,11 @@ function gantiKamera() {
 
 // Pertama buka kamera depan
 bukaKamera(currentMode);
+
+function settings() {
+  alert("Settings");
+}
+
+function takeFoto() {
+  alert("Foto diambil");
+}
