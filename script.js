@@ -1,3 +1,6 @@
+/* ===================================
+Bagian Kamera
+====================================== */ 
 let stream;
 let currentMode = "user";
 
@@ -52,3 +55,33 @@ function takeFoto() {
 }
 
 bukaKamera(currentMode);
+
+/* ===================================
+Bagian Canvas (menyimpan hasil foto)
+====================================== */
+function takeFoto() {
+
+  const canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  context.drawImage(video, 0, 0);
+
+  const image = canvas.toDataURL("image/png");
+
+  const img = document.createElement("img");
+  img.src = image;
+
+  document.getElementById("hasil").appendChild(img);
+}
+
+/* ===================================
+Bagian Timer
+====================================== */ 
+let delay = 3;
+
+document.getElementById("s3").onclick = () => delay = 3;
+document.getElementById("s5").onclick = () => delay = 5;
+document.getElementById("s10").onclick = () => delay = 10;
