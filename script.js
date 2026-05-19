@@ -119,25 +119,7 @@ soundToggle.addEventListener("change", () => {
 
 });
 
-// FLASH
-if (flashEnabled) {
 
-  const flash = document.getElementById("flash");
-
-  flash.style.opacity = "1";
-
-  setTimeout(() => {
-    flash.style.opacity = "0";
-  }, 100);
-
-}
-
-// SOUND
-if (soundEnabled) {
-
-  document.getElementById("shutter").play();
-
-}
 
 async function takeFoto() {
 
@@ -160,6 +142,26 @@ async function takeFoto() {
       clearInterval(timer);
 
       countdownEl.style.display = "none";
+      
+      // FLASH
+if (flashEnabled) {
+
+  const flash = document.getElementById("flash");
+
+  flash.style.opacity = "1";
+
+  setTimeout(() => {
+    flash.style.opacity = "0";
+  }, 100);
+
+}
+
+// SOUND
+if (soundEnabled) {
+
+  document.getElementById("shutter").play();
+
+}
 
       // =========================
       // AMBIL FOTO
