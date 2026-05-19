@@ -86,6 +86,22 @@ main {
   justify-content: center;
   align-items: center;
   padding: 15px 0;
+  position: relative;
+}
+
+
+#countdown {
+  position: absolute;
+  top: 20px;
+  z-index: 10;
+
+  font-size: 5rem;
+  font-weight: bold;
+  color: white;
+
+  text-shadow: 0 0 10px black;
+
+  display: none;
 }
 
 video {
@@ -128,6 +144,111 @@ video {
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
 }
 
+/* =========================
+   POPUP SETTINGS
+========================= */
+
+.popup {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.5);
+
+  display: none;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 999;
+}
+
+.popup-content {
+  width: 300px;
+
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* SWITCH */
+
+.switch {
+  position: relative;
+  width: 50px;
+  height: 25px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+
+  background: gray;
+
+  border-radius: 30px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: "";
+
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+
+  left: 3px;
+  top: 2.5px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: pink;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(24px);
+}
+
+/* FLASH */
+
+#flash {
+  position: fixed;
+  inset: 0;
+
+  background: white;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transition: 0.1s;
+
+  z-index: 1000;
+}
+
 /* ========================================
    Hasil Jepret
 ======================================== */
@@ -142,6 +263,7 @@ aside {
 
 .aside-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -149,6 +271,7 @@ aside {
 #hasil {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 10px;
   padding: 10px;
 }
@@ -157,4 +280,12 @@ aside {
   width: 100%;
   border-radius: 12px;
   border: 2px solid black;
+}
+
+.aside-wrapper button {
+  font-size: 1.5rem;
+  padding: 5px;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 12px;
 }

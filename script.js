@@ -58,34 +58,135 @@ bukaKamera(currentMode);
 
 /* ===================================
 Bagian Canvas (menyimpan hasil foto)
-====================================== */function takeFoto() {
+====================================== */
+let selectedTimer = 3;
 
-  const canvas = document.createElement("canvas");
+const countdownEl = document.getElementById("countdown");
 
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+// tombol timer
+document.getElementById("s3").onclick = () => {
+  selectedTimer = 3;
+};
 
-  const context = canvas.getContext("2d");
+document.getElementById("s5").onclick = () => {
+  selectedTimer = 5;
+};
 
-  context.drawImage(video, 0, 0);
+document.getElementById("s10").onclick = () => {
+  selectedTimer = 10;
+};
 
-  // ubah jadi gambar
-  const imageData = canvas.toDataURL("image/png");
 
-  // buat elemen img
-  const img = document.createElement("img");
 
-  img.src = imageData;
+// =========================
+// SETTINGS
+// =========================
 
-  // simpan ke hasil jepret
-  document.getElementById("hasil").prepend(img);
+const popup = document.getElementById("settingsPopup");
+
+const flashToggle = document.getElementById("flashToggle");
+
+const soundToggle = document.getElementById("soundToggle");
+
+let flashEnabled = true;
+let soundEnabled = true;
+
+// buka popup
+function settings() {
+
+  popup.style.display = "flex";
+
 }
 
-/* ===================================
-Bagian Timer
-====================================== */ 
-let delay = 3;
+// tutup popup
+document.getElementById("closePopup").onclick = () => {
 
-document.getElementById("s3").onclick = () => delay = 3;
-document.getElementById("s5").onclick = () => delay = 5;
-document.getElementById("s10").onclick = () => delay = 10;
+  popup.style.display = "none";
+
+};
+
+// toggle flash
+flashToggle.addEventListener("change", () => {
+
+  flashEnabled = flashToggle.checked;
+
+});
+
+// toggle suara
+soundToggle.addEventListener("change", () => {
+
+  soundEnabled = soundToggle.checked;
+
+});
+
+// FLASH
+if (flashEnabled) {
+
+  const flash = document.getElementById("flash");
+
+  flash.style.opacity = "1";
+
+  setTimeout(() => {
+    flash.style.opacity = "0";
+  }, 100);
+
+}
+
+// SOUND
+if (soundEnabled) {
+
+  document.getElementById("shutter").play();
+
+}
+
+async function takeFoto() {
+
+  let timeLeft = selectedTimer;
+
+  countdownEl.style.display = "block";
+  countdownEl.innerText = timeLeft;
+
+  // countdown berjalan
+  const timer = setInterval(() => {
+
+    timeLeft--;
+
+    if (timeLeft > 0) {
+
+      countdownEl.innerText = timeLeft;
+
+    } else {
+
+      clearInterval(timer);
+
+      countdownEl.style.display = "none";
+
+      // =========================
+      // AMBIL FOTO
+      // =========================
+
+      const canvas = document.createElement("canvas");
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext("2d");
+
+      context.drawImage(video, 0, 0);
+
+      const imageData = canvas.toDataURL("image/png");
+
+      const img = document.createElement("img");
+
+      img.src = imageData;
+
+      document.getElementById("hasil").prepend(img);
+
+    }
+
+  }, 1000);
+
+}
+
+
+

@@ -24,6 +24,7 @@
           </section>
         
           <section class="kamera">
+            <div id="countdown">3</div>
             <video id="video" autoplay playsinline width="300"></video>
             <div class="tombol">
               <button onclick="settings()"><i class="fa-solid fa-gear"></i></button>
@@ -39,8 +40,45 @@
               <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
           </section>
+          
+        <!-- SETTINGS POPUP -->
+        <div id="settingsPopup" class="popup">
+        
+          <div class="popup-content">
+        
+            <h2>Settings</h2>
+        
+            <div class="setting-item">
+              <span>Flash Kamera</span>
+        
+              <label class="switch">
+                <input type="checkbox" id="flashToggle" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+        
+            <div class="setting-item">
+              <span>Suara Kamera</span>
+        
+              <label class="switch">
+                <input type="checkbox" id="soundToggle" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+        
+            <button id="closePopup">Tutup</button>
+        
+          </div>
+        
         </div>
-      </div>
+        
+        <!-- FLASH EFFECT -->
+        <div id="flash"></div>
+        
+        <!-- AUDIO -->
+        <audio id="shutter" src="camera.mp3"></audio>
+                </div>
+              </div>
     
     
 
@@ -49,6 +87,8 @@
           <h1>Hasil Jepret</h1>
           
           <div id="hasil"></div>
+          
+          <button><i class="fa-solid fa-download"></i> DOWNLOAD</button>
         </div>
       </aside>
     </main>
