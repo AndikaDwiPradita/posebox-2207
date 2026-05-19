@@ -58,23 +58,27 @@ bukaKamera(currentMode);
 
 /* ===================================
 Bagian Canvas (menyimpan hasil foto)
-====================================== */
-function takeFoto() {
+====================================== */function takeFoto() {
 
-  const canvas = document.getElementById("canvas");
-  const context = canvas.getContext("2d");
+  const canvas = document.createElement("canvas");
 
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
 
+  const context = canvas.getContext("2d");
+
   context.drawImage(video, 0, 0);
 
-  const image = canvas.toDataURL("image/png");
+  // ubah jadi gambar
+  const imageData = canvas.toDataURL("image/png");
 
+  // buat elemen img
   const img = document.createElement("img");
-  img.src = image;
 
-  document.getElementById("hasil").appendChild(img);
+  img.src = imageData;
+
+  // simpan ke hasil jepret
+  document.getElementById("hasil").prepend(img);
 }
 
 /* ===================================
