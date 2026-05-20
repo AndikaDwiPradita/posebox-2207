@@ -46,14 +46,6 @@ function gantiKamera() {
   bukaKamera(currentMode);
 }
 
-function settings() {
-  alert("Settings");
-}
-
-function takeFoto() {
-  alert("Foto");
-}
-
 bukaKamera(currentMode);
 
 /* ===================================
@@ -64,17 +56,44 @@ let selectedTimer = 3;
 const countdownEl = document.getElementById("countdown");
 
 // tombol timer
+const timerButtons = document.querySelectorAll(".timer button");
+
 document.getElementById("s3").onclick = () => {
+
   selectedTimer = 3;
+
+  setActiveButton("s3");
+
 };
 
 document.getElementById("s5").onclick = () => {
+
   selectedTimer = 5;
+
+  setActiveButton("s5");
+
 };
 
 document.getElementById("s10").onclick = () => {
+
   selectedTimer = 10;
+
+  setActiveButton("s10");
+
 };
+
+function setActiveButton(id) {
+
+  timerButtons.forEach(button => {
+
+    button.classList.remove("active");
+
+  });
+
+  document.getElementById(id).classList.add("active");
+
+}
+
 
 
 
@@ -120,8 +139,12 @@ soundToggle.addEventListener("change", () => {
 });
 
 
-
+let isTakingPhoto = false;
 async function takeFoto() {
+
+  if (isTakingPhoto) return;
+
+  isTakingPhoto = true;
 
   let timeLeft = selectedTimer;
 
@@ -183,6 +206,7 @@ if (soundEnabled) {
       img.src = imageData;
 
       document.getElementById("hasil").prepend(img);
+      isTakingPhoto = false;
 
     }
 

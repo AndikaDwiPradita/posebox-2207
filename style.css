@@ -69,7 +69,7 @@ main {
   margin-top:5px;
 }
 
-.timer #s3, #s5, #s10 {
+.timer button {
   border: 1px solid black;
   font-size: 1.8rem;
   padding: 5px 10px;
@@ -109,6 +109,7 @@ video {
   max-width: 300px;
   border-radius: 12px;
   background: black;
+  object-fit: cover;
 }
 
 .tombol button{
@@ -119,6 +120,12 @@ video {
   background: rgba(128, 128, 128, 0.2); /* abu-abu transparan */
   backdrop-filter: blur(12px); /* efek blur */
   -webkit-backdrop-filter: blur(12px); /* untuk Safari */
+}
+
+.timer button.active {
+  background: pink;
+  color: white;
+  border: 1px solid black;
 }
 
 /* Fitur Section */
@@ -288,4 +295,27 @@ aside {
   margin: 10px;
   border: 1px solid black;
   border-radius: 12px;
+}
+
+.foto-item {
+  position: relative;
+}
+
+.hapus-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  border: none;
+  border-radius: 50%;
+
+  width: 35px;
+  height: 35px;
+
+  font-size: 1rem;
+
+  background: red;
+  color: white;
+
+  cursor: pointer;
 }
