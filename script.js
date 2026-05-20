@@ -200,12 +200,39 @@ if (soundEnabled) {
       context.drawImage(video, 0, 0);
 
       const imageData = canvas.toDataURL("image/png");
-
+      
+      // container foto
+      const fotoItem = document.createElement("div");
+      
+      fotoItem.classList.add("foto-item");
+      
+      // gambar
       const img = document.createElement("img");
-
+      
       img.src = imageData;
-
-      document.getElementById("hasil").prepend(img);
+      
+      // tombol hapus
+      const hapusBtn = document.createElement("button");
+      
+      hapusBtn.innerHTML = "✖";
+      
+      hapusBtn.classList.add("hapus-btn");
+      
+      // saat tombol ditekan
+      hapusBtn.onclick = () => {
+      
+        fotoItem.remove();
+      
+      };
+      
+      // masukkan ke container
+      fotoItem.appendChild(img);
+      
+      fotoItem.appendChild(hapusBtn);
+      
+      // tampilkan di hasil
+      document.getElementById("hasil").prepend(fotoItem);
+      
       isTakingPhoto = false;
 
     }
