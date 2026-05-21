@@ -35,7 +35,7 @@
           
           <section class="fitur">
              <div class="button-fitur">
-              <button onclick="buatStrip()"><i class="fa-solid fa-border-all"></i><p>Photo Strip</p></button>
+              <button onclick="openTemplatePopup()"><i class="fa-solid fa-border-all"></i><p>Template</p></button>
               <button onclick="openFilterPopup()"><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
               <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
@@ -116,6 +116,17 @@
     <button id="closeFilterPopup">
       Tutup
     </button>
+  </div>
+</div>
+
+<div id="templatePopup" class="popup">
+  <div class="popup-content">
+    <h2>Pilih Desain</h2>
+    <button onclick="pilihTemplate('pink')">🌸 Pink</button>
+    <button onclick="pilihTemplate('dark')">🖤 Dark</button>
+    <button onclick="pilihTemplate('retro')">📼 Retro</button>
+    <button onclick="pilihTemplate('minimal')">🤍 Minimal</button>
+    <button onclick="closeTemplate()">Tutup</button>
   </div>
 </div>
         

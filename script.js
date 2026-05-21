@@ -3,6 +3,11 @@ Bagian Kamera
 ====================================== */ 
 let stream;
 let currentMode = "user";
+let selectedTemplate = "pink";
+
+let stripPhotos = [];
+
+const MAX_PHOTO = 3;
 
 const video = document.getElementById("video");
 
@@ -259,7 +264,18 @@ if (soundEnabled) {
       fotoItem.appendChild(hapusBtn);
       
       // tampilkan di hasil
-      document.getElementById("hasil").prepend(fotoItem);
+      stripPhotos.push(
+imageData
+);
+
+if(
+stripPhotos.length
+===MAX_PHOTO
+){
+
+buatStrip();
+
+}
       
       isTakingPhoto = false;
 
@@ -268,36 +284,62 @@ if (soundEnabled) {
   }, 1000);
 
 }
+async function buatStrip(){
 
-async function buatStrip() {
+const box=
+document
+.getElementById(
+"hasilStrip"
+);
 
-const foto = document.querySelectorAll("#hasil img");
+box.innerHTML="";
 
-if (foto.length < 3) {
+const canvas=
+document
+.createElement(
+"canvas"
+);
 
-alert("Minimal 3 foto");
+const ctx=
+canvas
+.getContext(
+"2d"
+);
 
-return;
+canvas.width=900;
+
+canvas.height=2200;
+
+
+// TEMPLATE
+let bg="#fff8fb";
+
+if(
+selectedTemplate==="dark"
+){
+
+bg="#111";
 
 }
 
-const canvas =
-document.createElement("canvas");
+if(
+selectedTemplate==="retro"
+){
 
-const ctx =
-canvas.getContext("2d");
+bg="#ffe4c4";
 
-// ukuran strip
-canvas.width = 900;
+}
 
-canvas.height =
-(foto.length * 700)
-+ 350;
+if(
+selectedTemplate==="minimal"
+){
 
+bg="#fff";
 
-// background
-ctx.fillStyle =
-"#fff8fb";
+}
+
+ctx.fillStyle=
+bg;
 
 ctx.fillRect(
 0,
@@ -307,82 +349,64 @@ canvas.height
 );
 
 
-// border
-ctx.strokeStyle =
-"#ffc0cb";
-
-ctx.lineWidth = 20;
-
-ctx.strokeRect(
-10,
-10,
-canvas.width-20,
-canvas.height-20
-);
-
-
-// logo
-ctx.fillStyle =
-"#ff6fa7";
-
-ctx.textAlign =
-"center";
-
-ctx.font =
-"bold 60px sans-serif";
-
-ctx.fillText(
-"POSEBOX",
-canvas.width/2,
-90
-);
-
-
-// subtitle
-ctx.fillStyle =
-"#888";
-
-ctx.font =
-"28px sans-serif";
-
-ctx.fillText(
-"Capture Your Moment",
-canvas.width/2,
-140
-);
-
-
 // FOTO
-for (
+for(
 let i=0;
-i<foto.length;
+i<stripPhotos.length;
 i++
 ){
 
-await new Promise(resolve=>{
+await new Promise(
+resolve=>{
 
-const img =
+const img=
 new Image();
 
 img.onload=
 ()=>{
 
-ctx.fillStyle=
-"white";
+// supaya tidak gepeng
 
-ctx.fillRect(
-80,
-190+(i*700),
-740,
-580
-);
+const ratio=
+img.width/
+img.height;
+
+let w=700;
+
+let h=
+w/
+ratio;
+
+
+// crop tinggi
+if(
+h>550
+){
+
+h=550;
+
+w=
+h*
+ratio;
+
+}
+
+const x=
+(canvas.width-w)
+/2;
 
 ctx.drawImage(
+
 img,
-100,
-210+(i*700),
-700,
-540
+
+x,
+
+180+(i*620),
+
+w,
+
+h
+
 );
 
 resolve();
@@ -390,61 +414,68 @@ resolve();
 };
 
 img.src=
-foto[i].src;
+stripPhotos[i];
 
 });
 
 }
 
 
-// footer
-ctx.fillStyle =
-"#ff6fa7";
+// EXPORT
 
-ctx.font =
-"35px sans-serif";
+const hasil=
+canvas
+.toDataURL();
 
-ctx.fillText(
-"✦ SMILE ✦",
-canvas.width/2,
-canvas.height-90
+const img=
+document
+.createElement(
+"img"
 );
 
-ctx.fillStyle =
-"#666";
-
-ctx.font =
-"24px sans-serif";
-
-ctx.fillText(
-new Date()
-.toLocaleDateString(),
-
-canvas.width/2,
-
-canvas.height-40
-);
-
-
-// tampilkan hasil
-const hasil =
-canvas.toDataURL();
-
-const img =
-document.createElement("img");
-
-img.src =
+img.src=
 hasil;
 
-const box =
-document.getElementById(
-"hasilStrip"
+box.append(
+img
 );
-
-box.innerHTML="";
-
-box.append(img);
 
 }
 
 
+function openTemplatePopup(){
+
+document
+.getElementById(
+"templatePopup"
+)
+.style.display=
+"flex";
+
+}
+
+function closeTemplate(){
+
+document
+.getElementById(
+"templatePopup"
+)
+.style.display=
+"none";
+
+}
+
+function pilihTemplate(
+name
+){
+
+selectedTemplate=
+name;
+
+closeTemplate();
+
+alert(
+"Template dipilih"
+);
+
+}
