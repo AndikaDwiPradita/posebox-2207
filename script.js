@@ -138,6 +138,33 @@ soundToggle.addEventListener("change", () => {
 
 });
 
+// =========================
+// FILTER KAMERA
+// =========================
+
+const filterPopup = document.getElementById("filterPopup");
+
+// buka popup
+function openFilterPopup() {
+
+  filterPopup.style.display = "flex";
+
+}
+
+// tutup popup
+document.getElementById("closeFilterPopup").onclick = () => {
+
+  filterPopup.style.display = "none";
+
+};
+
+// ganti filter
+function setFilter(filter) {
+
+  video.style.filter = filter;
+
+}
+
 
 let isTakingPhoto = false;
 async function takeFoto() {
@@ -196,7 +223,8 @@ if (soundEnabled) {
       canvas.height = video.videoHeight;
 
       const context = canvas.getContext("2d");
-
+      
+      context.filter = video.style.filter;
       context.drawImage(video, 0, 0);
 
       const imageData = canvas.toDataURL("image/png");
@@ -241,5 +269,182 @@ if (soundEnabled) {
 
 }
 
+async function buatStrip() {
+
+const foto = document.querySelectorAll("#hasil img");
+
+if (foto.length < 3) {
+
+alert("Minimal 3 foto");
+
+return;
+
+}
+
+const canvas =
+document.createElement("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+// ukuran strip
+canvas.width = 900;
+
+canvas.height =
+(foto.length * 700)
++ 350;
+
+
+// background
+ctx.fillStyle =
+"#fff8fb";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+// border
+ctx.strokeStyle =
+"#ffc0cb";
+
+ctx.lineWidth = 20;
+
+ctx.strokeRect(
+10,
+10,
+canvas.width-20,
+canvas.height-20
+);
+
+
+// logo
+ctx.fillStyle =
+"#ff6fa7";
+
+ctx.textAlign =
+"center";
+
+ctx.font =
+"bold 60px sans-serif";
+
+ctx.fillText(
+"POSEBOX",
+canvas.width/2,
+90
+);
+
+
+// subtitle
+ctx.fillStyle =
+"#888";
+
+ctx.font =
+"28px sans-serif";
+
+ctx.fillText(
+"Capture Your Moment",
+canvas.width/2,
+140
+);
+
+
+// FOTO
+for (
+let i=0;
+i<foto.length;
+i++
+){
+
+await new Promise(resolve=>{
+
+const img =
+new Image();
+
+img.onload=
+()=>{
+
+ctx.fillStyle=
+"white";
+
+ctx.fillRect(
+80,
+190+(i*700),
+740,
+580
+);
+
+ctx.drawImage(
+img,
+100,
+210+(i*700),
+700,
+540
+);
+
+resolve();
+
+};
+
+img.src=
+foto[i].src;
+
+});
+
+}
+
+
+// footer
+ctx.fillStyle =
+"#ff6fa7";
+
+ctx.font =
+"35px sans-serif";
+
+ctx.fillText(
+"✦ SMILE ✦",
+canvas.width/2,
+canvas.height-90
+);
+
+ctx.fillStyle =
+"#666";
+
+ctx.font =
+"24px sans-serif";
+
+ctx.fillText(
+new Date()
+.toLocaleDateString(),
+
+canvas.width/2,
+
+canvas.height-40
+);
+
+
+// tampilkan hasil
+const hasil =
+canvas.toDataURL();
+
+const img =
+document.createElement("img");
+
+img.src =
+hasil;
+
+const box =
+document.getElementById(
+"hasilStrip"
+);
+
+box.innerHTML="";
+
+box.append(img);
+
+}
 
 

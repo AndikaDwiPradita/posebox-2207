@@ -34,9 +34,9 @@
           </section>
           
           <section class="fitur">
-            <div class="button-fitur">
-              <button><i class="fa-solid fa-border-all"></i><p>Bingkai</p></button>
-              <button><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
+             <div class="button-fitur">
+              <button onclick="buatStrip()"><i class="fa-solid fa-border-all"></i><p>Photo Strip</p></button>
+              <button onclick="openFilterPopup()"><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
               <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
           </section>
@@ -50,6 +50,7 @@
           <h1>Hasil Jepret</h1>
           
           <div id="hasil"></div>
+          <div id="hasilStrip"></div>
           
           <button><i class="fa-solid fa-download"></i> DOWNLOAD</button>
         </div>
@@ -80,9 +81,7 @@
             </div>
         
             <button id="closePopup">Tutup</button>
-        
           </div>
-        
         </div>
         
         <!-- FLASH EFFECT -->
@@ -90,6 +89,36 @@
         
         <!-- AUDIO -->
         <audio id="shutter" src="camera.mp3"></audio>
+        <!-- FILTER POPUP -->
+<div id="filterPopup" class="popup">
+  <div class="popup-content">
+    <h2>Filter Kamera</h2>
+    <div class="filter-list">
+      <button onclick="setFilter('none')">
+        Normal
+      </button>
+      <button onclick="setFilter('grayscale(1)')">
+        Black & White
+      </button>
+      <button onclick="setFilter('sepia(1)')">
+        Vintage
+      </button>
+      <button onclick="setFilter('contrast(1.2) saturate(1.3)')">
+        Warm
+      </button>
+      <button onclick="setFilter('brightness(1.1) contrast(1.1)')">
+        Bright
+      </button>
+      <button onclick="setFilter('blur(2px)')">
+        Blur
+      </button>
+    </div>
+    <button id="closeFilterPopup">
+      Tutup
+    </button>
+  </div>
+</div>
+        
     </main>
     <script src="script.js"></script>
   </body>
