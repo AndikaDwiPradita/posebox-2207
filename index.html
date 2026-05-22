@@ -36,6 +36,7 @@
           <section class="fitur">
              <div class="button-fitur">
               <button onclick="openTemplatePopup()"><i class="fa-solid fa-border-all"></i><p>Template</p></button>
+              <button onclick="openStickerPopup()"><i class="fa-regular fa-face-smile"></i><p>Stiker</p></button>
               <button onclick="openFilterPopup()"><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
               <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
@@ -51,44 +52,36 @@
           
           <div id="hasil"></div>
           <div id="hasilStrip"></div>
-          
-          <button><i class="fa-solid fa-download"></i> DOWNLOAD</button>
+          <button id="downloadStripBtn"><i class="fa-solid fa-download"></i> DOWNLOAD</button>
         </div>
       </aside>
-                  <!-- SETTINGS POPUP -->
-        <div id="settingsPopup" class="popup">
-        
-          <div class="popup-content">
-        
-            <h2>Settings</h2>
-        
-            <div class="setting-item">
-              <span>Flash Kamera</span>
-        
-              <label class="switch">
-                <input type="checkbox" id="flashToggle" checked>
-                <span class="slider"></span>
+      
+      <div id="settingsPopup" class="popup">
+        <div class="popup-content">
+          <h2>Settings</h2>
+          <div class="setting-item">
+            <span>Flash Kamera</span>
+            <label class="switch">
+              <input type="checkbox" id="flashToggle" checked>
+              <span class="slider"></span>
               </label>
-            </div>
-        
-            <div class="setting-item">
-              <span>Suara Kamera</span>
-        
-              <label class="switch">
-                <input type="checkbox" id="soundToggle" checked>
-                <span class="slider"></span>
-              </label>
-            </div>
-        
-            <button id="closePopup">Tutup</button>
           </div>
+          
+          <div class="setting-item">
+            <span>Suara Kamera</span>
+            <label class="switch">
+              <input type="checkbox" id="soundToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button id="closePopup">Tutup</button>
         </div>
-        
-        <!-- FLASH EFFECT -->
-        <div id="flash"></div>
-        
+      </div>
+      <!-- FLASH EFFECT -->
+      <div id="flash"></div>
         <!-- AUDIO -->
         <audio id="shutter" src="camera.mp3"></audio>
+        
         <!-- FILTER POPUP -->
 <div id="filterPopup" class="popup">
   <div class="popup-content">
@@ -118,17 +111,37 @@
     </button>
   </div>
 </div>
-
-<div id="templatePopup" class="popup">
-  <div class="popup-content">
-    <h2>Pilih Desain</h2>
-    <button onclick="pilihTemplate('pink')">🌸 Pink</button>
-    <button onclick="pilihTemplate('dark')">🖤 Dark</button>
-    <button onclick="pilihTemplate('retro')">📼 Retro</button>
-    <button onclick="pilihTemplate('minimal')">🤍 Minimal</button>
-    <button onclick="closeTemplate()">Tutup</button>
-  </div>
-</div>
+        
+        <div id="templatePopup" class="popup">
+          <div class="popup-content">
+            <h2>Pilih Background Strip</h2>
+            <button onclick="pilihTemplate('pink')">🌸 Pink</button>
+            <button onclick="pilihTemplate('dark')">🖤 Dark</button>
+            <button onclick="pilihTemplate('retro')">📼 Retro</button>
+            <button onclick="pilihTemplate('minimal')">🤍 Minimal</button>
+            <button onclick="pilihTemplate('canva')">🎨 Canva Gradient</button>
+            <button onclick="closeTemplate()">Tutup</button>
+          </div>
+        </div>
+        
+        <div id="stickerPopup" class="popup">
+          <div class="popup-content">
+            <h2>Pilih Stiker (hanya satu aktif)</h2>
+            <div class="sticker-list" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+              <button onclick="pilihStiker('📸')">📸</button>
+              <button onclick="pilihStiker('✨')">✨ </button>
+              <button onclick="pilihStiker('💖')">💖</button>
+              <button onclick="pilihStiker('⭐')">⭐ <utton>
+              <button onclick="pilihStiker('🎨')">🎨</button>
+              <button onclick="pilihStiker('❤️')">❤️</button>
+              <button onclick="pilihStiker('😊')">😊</button>
+              <button onclick="pilihStiker('🎉')">🎉</button>
+              <button onclick="pilihStiker('🌸')">🌸</button>
+              <button onclick="pilihStiker('🦄')">🦄</button>
+            </div>
+            <button id="closeStickerPopup" style="margin-top: 15px;">Tutup</button>
+          </div>
+        </div>
         
     </main>
     <script src="script.js"></script>

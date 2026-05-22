@@ -346,17 +346,36 @@ aside {
   color: white;
 }
 
+
+/* Photo Strip */
 #hasilStrip {
-  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
-
-#hasilStrip img{
-width:100%;
-max-width:300px;
-border-radius:20px;
+#hasilStrip img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
-
-.popup-content button{
-padding:12px;
-margin:5px;
+#downloadStripBtn {
+  transition: 0.2s;
+}
+#downloadStripBtn:hover {
+  background: #ff77aa;
+  transform: scale(1.02);
+}
+.sticker-list button {
+  font-size: 2rem;
+  padding: 10px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.sticker-list button:hover {
+  background: pink;
+  transform: scale(1.05);
 }

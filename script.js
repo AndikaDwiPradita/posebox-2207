@@ -1,481 +1,345 @@
 /* ===================================
 Bagian Kamera
-====================================== */ 
+====================================== */
 let stream;
 let currentMode = "user";
-let selectedTemplate = "pink";
-
-let stripPhotos = [];
-
-const MAX_PHOTO = 3;
-
 const video = document.getElementById("video");
 
 async function bukaKamera(mode) {
-
-  // Matikan kamera sebelumnya
   if (stream) {
     stream.getTracks().forEach(track => track.stop());
   }
-
   try {
-
     stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-        facingMode: mode
-      },
+      video: { facingMode: mode },
       audio: false
     });
-
     video.srcObject = stream;
-
     await video.play();
-
-    console.log("Kamera berhasil aktif");
-
   } catch (err) {
-
-    console.log("ERROR:", err);
     alert(err.message);
-
   }
 }
 
 function gantiKamera() {
-
-  currentMode =
-    currentMode === "user"
-      ? "environment"
-      : "user";
-
+  currentMode = currentMode === "user" ? "environment" : "user";
   bukaKamera(currentMode);
 }
 
 bukaKamera(currentMode);
 
 /* ===================================
-Bagian Canvas (menyimpan hasil foto)
+Timer
 ====================================== */
 let selectedTimer = 3;
-
 const countdownEl = document.getElementById("countdown");
-
-// tombol timer
 const timerButtons = document.querySelectorAll(".timer button");
 
-document.getElementById("s3").onclick = () => {
-
-  selectedTimer = 3;
-
-  setActiveButton("s3");
-
-};
-
-document.getElementById("s5").onclick = () => {
-
-  selectedTimer = 5;
-
-  setActiveButton("s5");
-
-};
-
-document.getElementById("s10").onclick = () => {
-
-  selectedTimer = 10;
-
-  setActiveButton("s10");
-
-};
-
 function setActiveButton(id) {
-
-  timerButtons.forEach(button => {
-
-    button.classList.remove("active");
-
-  });
-
+  timerButtons.forEach(button => button.classList.remove("active"));
   document.getElementById(id).classList.add("active");
-
 }
 
+document.getElementById("s3").onclick = () => {
+  selectedTimer = 3;
+  setActiveButton("s3");
+};
+document.getElementById("s5").onclick = () => {
+  selectedTimer = 5;
+  setActiveButton("s5");
+};
+document.getElementById("s10").onclick = () => {
+  selectedTimer = 10;
+  setActiveButton("s10");
+};
 
+setActiveButton("s3");
 
-
-// =========================
-// SETTINGS
-// =========================
-
+/* ===================================
+SETTINGS
+====================================== */
 const popup = document.getElementById("settingsPopup");
-
 const flashToggle = document.getElementById("flashToggle");
-
 const soundToggle = document.getElementById("soundToggle");
-
 let flashEnabled = true;
 let soundEnabled = true;
 
-// buka popup
 function settings() {
-
   popup.style.display = "flex";
-
 }
 
-// tutup popup
 document.getElementById("closePopup").onclick = () => {
-
   popup.style.display = "none";
-
 };
 
-// toggle flash
 flashToggle.addEventListener("change", () => {
-
   flashEnabled = flashToggle.checked;
-
 });
 
-// toggle suara
 soundToggle.addEventListener("change", () => {
-
   soundEnabled = soundToggle.checked;
-
 });
 
-// =========================
-// FILTER KAMERA
-// =========================
-
+/* ===================================
+FILTER
+====================================== */
 const filterPopup = document.getElementById("filterPopup");
 
-// buka popup
 function openFilterPopup() {
-
   filterPopup.style.display = "flex";
-
 }
 
-// tutup popup
 document.getElementById("closeFilterPopup").onclick = () => {
-
   filterPopup.style.display = "none";
-
 };
 
-// ganti filter
 function setFilter(filter) {
-
   video.style.filter = filter;
-
 }
 
-
+/* ===================================
+FOTO
+====================================== */
 let isTakingPhoto = false;
+
 async function takeFoto() {
-
   if (isTakingPhoto) return;
-
   isTakingPhoto = true;
 
   let timeLeft = selectedTimer;
-
   countdownEl.style.display = "block";
   countdownEl.innerText = timeLeft;
 
-  // countdown berjalan
   const timer = setInterval(() => {
-
     timeLeft--;
-
     if (timeLeft > 0) {
-
       countdownEl.innerText = timeLeft;
-
     } else {
-
       clearInterval(timer);
-
       countdownEl.style.display = "none";
-      
+
       // FLASH
-if (flashEnabled) {
+      if (flashEnabled) {
+        const flash = document.getElementById("flash");
+        flash.style.opacity = "1";
+        setTimeout(() => {
+          flash.style.opacity = "0";
+        }, 100);
+      }
 
-  const flash = document.getElementById("flash");
+      // SOUND
+      if (soundEnabled) {
+        document.getElementById("shutter").play();
+      }
 
-  flash.style.opacity = "1";
-
-  setTimeout(() => {
-    flash.style.opacity = "0";
-  }, 100);
-
-}
-
-// SOUND
-if (soundEnabled) {
-
-  document.getElementById("shutter").play();
-
-}
-
-      // =========================
-      // AMBIL FOTO
-      // =========================
-
+      // CANVAS
       const canvas = document.createElement("canvas");
-
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-
       const context = canvas.getContext("2d");
-      
       context.filter = video.style.filter;
       context.drawImage(video, 0, 0);
-
       const imageData = canvas.toDataURL("image/png");
-      
-      // container foto
+      stripPhotos.push(imageData);
+
+      // WRAPPER
       const fotoItem = document.createElement("div");
-      
       fotoItem.classList.add("foto-item");
-      
-      // gambar
+
+      // IMG
       const img = document.createElement("img");
-      
       img.src = imageData;
-      
-      // tombol hapus
+
+      // DELETE
       const hapusBtn = document.createElement("button");
-      
       hapusBtn.innerHTML = "✖";
-      
       hapusBtn.classList.add("hapus-btn");
-      
-      // saat tombol ditekan
       hapusBtn.onclick = () => {
-      
         fotoItem.remove();
-      
       };
-      
-      // masukkan ke container
+
+      // MASUKKAN
       fotoItem.appendChild(img);
-      
       fotoItem.appendChild(hapusBtn);
-      
-      // tampilkan di hasil
-      stripPhotos.push(
-imageData
-);
 
-if(
-stripPhotos.length
-===MAX_PHOTO
-){
+      // TAMPILKAN
+      document.getElementById("hasil").prepend(fotoItem);
 
-buatStrip();
-
-}
-      
       isTakingPhoto = false;
-
+      if (stripPhotos.length === MAX_STRIP) {
+        buatStrip();
+      }
     }
-
   }, 1000);
-
-}
-async function buatStrip(){
-
-const box=
-document
-.getElementById(
-"hasilStrip"
-);
-
-box.innerHTML="";
-
-const canvas=
-document
-.createElement(
-"canvas"
-);
-
-const ctx=
-canvas
-.getContext(
-"2d"
-);
-
-canvas.width=900;
-
-canvas.height=2200;
-
-
-// TEMPLATE
-let bg="#fff8fb";
-
-if(
-selectedTemplate==="dark"
-){
-
-bg="#111";
-
 }
 
-if(
-selectedTemplate==="retro"
-){
+/* ===================================
+Poto Strip
+====================================== */
+let selectedTemplate = "pink";
+let stripPhotos = [];
+const MAX_STRIP = 3;
+let activeSticker = null;
+const stickerPosition = { x: 400, y: 1120, size: 70 };
 
-bg="#ffe4c4";
-
+// Fungsi untuk membuka/tutup popup template (background)
+function openTemplatePopup() {
+  document.getElementById("templatePopup").style.display = "flex";
+}
+function closeTemplate() {
+  document.getElementById("templatePopup").style.display = "none";
+}
+function pilihTemplate(nama) {
+  selectedTemplate = nama;
+  closeTemplate();
+  alert("Background berubah: " + nama);
 }
 
-if(
-selectedTemplate==="minimal"
-){
-
-bg="#fff";
-
+// Fungsi untuk membuka/tutup popup stiker
+function openStickerPopup() {
+  document.getElementById("stickerPopup").style.display = "flex";
 }
-
-ctx.fillStyle=
-bg;
-
-ctx.fillRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-// FOTO
-for(
-let i=0;
-i<stripPhotos.length;
-i++
-){
-
-await new Promise(
-resolve=>{
-
-const img=
-new Image();
-
-img.onload=
-()=>{
-
-// supaya tidak gepeng
-
-const ratio=
-img.width/
-img.height;
-
-let w=700;
-
-let h=
-w/
-ratio;
-
-
-// crop tinggi
-if(
-h>550
-){
-
-h=550;
-
-w=
-h*
-ratio;
-
-}
-
-const x=
-(canvas.width-w)
-/2;
-
-ctx.drawImage(
-
-img,
-
-x,
-
-180+(i*620),
-
-w,
-
-h
-
-);
-
-resolve();
-
+// Tutup popup stiker (pastikan elemen closeStickerPopup sudah ada)
+document.getElementById("closeStickerPopup").onclick = () => {
+  document.getElementById("stickerPopup").style.display = "none";
 };
-
-img.src=
-stripPhotos[i];
-
-});
-
+function pilihStiker(emoji) {
+  activeSticker = {
+    emoji: emoji,
+    x: stickerPosition.x,
+    y: stickerPosition.y,
+    size: stickerPosition.size
+  };
+  document.getElementById("stickerPopup").style.display = "none";
+  alert(`Stiker ${emoji} dipilih (otomatis ganti yang sebelumnya)`);
 }
 
-
-// EXPORT
-
-const hasil=
-canvas
-.toDataURL();
-
-const img=
-document
-.createElement(
-"img"
-);
-
-img.src=
-hasil;
-
-box.append(
-img
-);
-
+// Fungsi menggambar stiker ke canvas
+function drawSticker(ctx, emoji, x, y, size) {
+  ctx.font = `${size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillStyle = "rgba(0,0,0,0.3)";
+  ctx.fillText(emoji, x+2, y+2);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillText(emoji, x, y);
 }
 
+// Fungsi utama membuat strip foto
+async function buatStrip() {
+  const container = document.getElementById("hasilStrip");
+  if (!container || stripPhotos.length !== MAX_STRIP) return;
 
-function openTemplatePopup(){
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  const lebar = 800;
+  const tinggiFoto = 540;
+  const jarak = 30;
+  const tinggiTotal = MAX_STRIP * (tinggiFoto + jarak) + 180;
+  canvas.width = lebar;
+  canvas.height = tinggiTotal;
 
-document
-.getElementById(
-"templatePopup"
-)
-.style.display=
-"flex";
+  // 1. Background berdasarkan template yang dipilih
+  let bgColor, textColor;
+  switch (selectedTemplate) {
+    case "dark":
+      bgColor = "#1a1a2e";
+      textColor = "#eee";
+      break;
+    case "retro":
+      bgColor = "#f4e1c1";
+      textColor = "#6b3e1f";
+      break;
+    case "minimal":
+      bgColor = "#ffffff";
+      textColor = "#222";
+      break;
+    case "canva":
+      bgColor = "gradient";
+      textColor = "#2d3436";
+      break;
+    default: // pink
+      bgColor = "#ffe4ec";
+      textColor = "#b34180";
+  }
 
-}
+  if (bgColor === "gradient") {
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, "#fdebf7");
+    grad.addColorStop(1, "#fff3e6");
+    ctx.fillStyle = grad;
+  } else {
+    ctx.fillStyle = bgColor;
+  }
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-function closeTemplate(){
+  // Judul
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 44px 'Poppins', sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("📸 PHOTO STRIP", lebar/2, 70);
 
-document
-.getElementById(
-"templatePopup"
-)
-.style.display=
-"none";
+  // 2. Gambar 3 foto
+  for (let i = 0; i < stripPhotos.length; i++) {
+    const yBase = 140 + i * (tinggiFoto + jarak);
+    await new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 700;
+        const maxH = tinggiFoto - 30;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxW) { h = (h * maxW) / w; w = maxW; }
+        if (h > maxH) { w = (w * maxH) / h; h = maxH; }
+        const x = (lebar - w) / 2;
+        const y = yBase + (tinggiFoto - h) / 2;
 
-}
+        ctx.save();
+        ctx.shadowColor = "rgba(0,0,0,0.15)";
+        ctx.shadowBlur = 12;
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(x-12, y-12, w+24, h+24);
+        ctx.shadowBlur = 0;
+        ctx.drawImage(img, x, y, w, h);
+        ctx.restore();
 
-function pilihTemplate(
-name
-){
+        ctx.font = "bold 20px 'Poppins'";
+        ctx.fillStyle = textColor;
+        ctx.fillText(`✨ ${i+1} ✨`, x+15, y+35);
+        resolve();
+      };
+      img.src = stripPhotos[i];
+    });
+  }
 
-selectedTemplate=
-name;
+  // 3. Gambar stiker (jika ada)
+  if (activeSticker) {
+    drawSticker(ctx, activeSticker.emoji, activeSticker.x, activeSticker.y, activeSticker.size);
+  }
 
-closeTemplate();
+  // Footer tanggal
+  const today = new Date().toLocaleDateString("id-ID", { day:'numeric', month:'long', year:'numeric' });
+  ctx.font = "italic 16px 'Poppins'";
+  ctx.fillStyle = textColor;
+  ctx.fillText(`dicapture • ${today}`, lebar/2, canvas.height-35);
 
-alert(
-"Template dipilih"
-);
+  // Tampilkan hasil ke dalam <div id="hasilStrip">
+  const resultImg = document.createElement("img");
+  resultImg.src = canvas.toDataURL("image/png");
+  container.innerHTML = "";
+  container.appendChild(resultImg);
 
+  // Tombol download
+  const downloadBtn = document.getElementById("downloadStripBtn");
+  if (downloadBtn) {
+    downloadBtn.onclick = () => {
+      const link = document.createElement("a");
+      link.download = "photostrip.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    };
+  }
+
+  // Reset array foto (agar strip berikutnya bisa baru)
+  stripPhotos = [];
 }
