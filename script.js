@@ -305,7 +305,7 @@ async function buatStrip() {
 
         ctx.font = "bold 20px 'Poppins'";
         ctx.fillStyle = textColor;
-        ctx.fillText(`✨ ${i+1} ✨`, x+15, y+35);
+        ctx.fillText(x+15, y+35);
         resolve();
       };
       img.src = stripPhotos[i];
@@ -357,7 +357,7 @@ async function buatStrip() {
   if (downloadBtn) {
     downloadBtn.onclick = () => {
       const link = document.createElement("a");
-      link.download = "photostrip.png";
+      link.download = "posebox.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
     };
