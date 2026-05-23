@@ -305,7 +305,7 @@ async function buatStrip() {
 
         ctx.font = "bold 20px 'Poppins'";
         ctx.fillStyle = textColor;
-        ctx.fillText(x+15, y+35);
+        ctx.fillText(`${i+1}`, x+15, y+35);
         resolve();
       };
       img.src = stripPhotos[i];
