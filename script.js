@@ -192,7 +192,11 @@ function closeTemplate() {
 function pilihTemplate(nama) {
   selectedTemplate = nama;
   closeTemplate();
-  alert("Background berubah: " + nama);
+
+  // update preview langsung
+  if (stripPhotos.length > 0) {
+    buatStrip();
+  }
 }
 
 // Fungsi untuk membuka/tutup popup stiker
@@ -204,16 +208,19 @@ document.getElementById("closeStickerPopup").onclick = () => {
   document.getElementById("stickerPopup").style.display = "none";
 };
 function pilihStiker(emoji) {
-  activeSticker = {
-    emoji: emoji,
-    x: stickerPosition.x,
-    y: stickerPosition.y,
-    size: stickerPosition.size
-  };
-  document.getElementById("stickerPopup").style.display = "none";
-  alert(`Stiker ${emoji} dipilih (otomatis ganti yang sebelumnya)`);
-}
 
+  activeSticker = {
+    emoji,
+    size: 70
+  };
+
+  document.getElementById("stickerPopup").style.display = "none";
+
+  // update preview langsung
+  if (stripPhotos.length > 0) {
+    buatStrip();
+  }
+}
 // Fungsi menggambar stiker ke canvas
 function drawSticker(ctx, emoji, x, y, size) {
   ctx.font = `${size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
@@ -362,7 +369,4 @@ async function buatStrip() {
       link.click();
     };
   }
-
-  // Reset array foto (agar strip berikutnya bisa baru)
-  stripPhotos = [];
 }
