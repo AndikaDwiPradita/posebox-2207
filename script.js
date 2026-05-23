@@ -277,7 +277,7 @@ async function buatStrip() {
   ctx.fillStyle = textColor;
   ctx.font = "bold 44px 'Poppins', sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("📸 PHOTO STRIP", lebar/2, 70);
+  ctx.fillText("PoseBox", lebar/2, 70);
 
   // 2. Gambar 3 foto
   for (let i = 0; i < stripPhotos.length; i++) {
@@ -314,8 +314,31 @@ async function buatStrip() {
 
   // 3. Gambar stiker (jika ada)
   if (activeSticker) {
-    drawSticker(ctx, activeSticker.emoji, activeSticker.x, activeSticker.y, activeSticker.size);
+  const ukuran = 70;
+
+  for (let i = 0; i < MAX_STRIP; i++) {
+    const yBase = 140 + i * (tinggiFoto + jarak);
+
+    // kiri atas frame
+    drawSticker(
+      ctx,
+      activeSticker.emoji,
+      70,
+      yBase + 60,
+      ukuran
+    );
+
+    // kanan bawah frame
+    drawSticker(
+      ctx,
+      activeSticker.emoji,
+      730,
+      yBase + tinggiFoto - 60,
+      ukuran
+    );
   }
+}
+  
 
   // Footer tanggal
   const today = new Date().toLocaleDateString("id-ID", { day:'numeric', month:'long', year:'numeric' });
