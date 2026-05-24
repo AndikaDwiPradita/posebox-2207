@@ -296,16 +296,17 @@ async function buatStrip() {
 
   // tombol X
   for (let i = 0; i < MAX_STRIP; i++) {
-    if (stripPhotos[i]) {
-      const x = document.createElement("button");
-      x.className = "retake-x";
-      x.innerHTML = "✕";
-      x.style.top = `${160+i*570}px`;
-      x.style.left= `45px`;
-      x.onclick = () => retakeSlot(i);
-      preview.appendChild(x);
-    }
+  if (stripPhotos[i]) {
+    const btn = document.createElement("button");
+    btn.className = "retake-x";
+    btn.innerHTML = "✕";
+    // sejajar sama nomor frame
+    btn.style.top = `${165 + i * 570}px`;
+    btn.style.left = "150px";
+    btn.onclick = () => retakeSlot(i);
+    preview.appendChild(btn);
   }
+}
 
   container.appendChild(preview);
 
