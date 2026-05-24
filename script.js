@@ -131,7 +131,6 @@ document.getElementById("closeStickerPopup").onclick = () => {
 function pilihStiker(emoji) {
   activeSticker = emoji;
   document.getElementById("stickerPopup").style.display = "none";
-  if (stripPhotos.some(photo => photo !== null)) {
     buatStrip();
   }
 }
