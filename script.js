@@ -27,6 +27,7 @@ function gantiKamera() {
 }
 
 bukaKamera(currentMode);
+buatStrip();
 
 /* ===================================
 Timer
@@ -149,10 +150,10 @@ function drawSticker(ctx, emoji, x, y, size) {
 }
 
 // Retake foto tertentu
-function retakeSlot(index) {
-  stripPhotos[index] = null;
-  currentSlot = index;
-  buatStrip();
+function retakeSlot(index){
+stripPhotos[index]=null;
+currentSlot=index;
+buatStrip();
 }
 
 // Fungsi utama membuat strip foto
@@ -337,33 +338,18 @@ async function takeFoto() {
       const imageData = canvas.toDataURL("image/png");
 
       // Simpan ke stripPhotos di slot yang tersedia
-      if (currentSlot < MAX_STRIP) {
-        stripPhotos[currentSlot] = imageData;
-        currentSlot++;
-      }
+      stripPhotos[currentSlot] = imageData;
+      // cari slot kosong berikutnya
+      const next = stripPhotos.findIndex(
+        p => p === null
+        );
+        currentSlot =
+        next === -1
+        ? MAX_STRIP
+        : next;
 
-      // Tampilkan preview kecil di "hasil"
-      const fotoItem = document.createElement("div");
-      fotoItem.classList.add("foto-item");
-      const img = document.createElement("img");
-      img.src = imageData;
-      const hapusBtn = document.createElement("button");
-      hapusBtn.innerHTML = "✖";
-      hapusBtn.classList.add("hapus-btn");
-      hapusBtn.onclick = () => fotoItem.remove();
-      fotoItem.appendChild(img);
-      fotoItem.appendChild(hapusBtn);
-      document.getElementById("hasil").prepend(fotoItem);
-
+      buatStrip();
       isTakingPhoto = false;
-
-      // Update strip jika semua slot sudah terisi
-      if (stripPhotos.every(photo => photo !== null)) {
-        buatStrip();
-      } else {
-        // Tampilkan strip sementara (dengan placeholder)
-        buatStrip();
-      }
     }
   }, 1000);
-        }
+}
