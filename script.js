@@ -140,7 +140,10 @@ async function takeFoto() {
       context.filter = video.style.filter;
       context.drawImage(video, 0, 0);
       const imageData = canvas.toDataURL("image/png");
-      stripPhotos.push(imageData);
+      stripPhotos[currentSlot] = imageData;
+      if (currentSlot < MAX_STRIP - 1) {
+        currentSlot++;
+      }
 
       // WRAPPER
       const fotoItem = document.createElement("div");
@@ -177,8 +180,9 @@ async function takeFoto() {
 Poto Strip
 ====================================== */
 let selectedTemplate = "pink";
-let stripPhotos = [];
 const MAX_STRIP = 3;
+let stripPhotos = Array(MAX_STRIP).fill(null);
+let currentSlot = 0;
 let activeSticker = null;
 const stickerPosition = { x: 400, y: 1120, size: 70 };
 
@@ -216,8 +220,9 @@ function pilihStiker(emoji) {
 
   document.getElementById("stickerPopup").style.display = "none";
 
-  // update preview langsung
-  if (stripPhotos.length > 0) {
+  function retakeSlot(index){
+    stripPhotos[index]=null;
+    currentSlot=index;
     buatStrip();
   }
 }
@@ -287,7 +292,7 @@ async function buatStrip() {
   ctx.fillText("PoseBox", lebar/2, 70);
 
   // 2. Gambar 3 foto
-  for (let i = 0; i < stripPhotos.length; i++) {
+  for (let i = 0; i < MAX_STRIP; i++) {
     const yBase = 140 + i * (tinggiFoto + jarak);
     await new Promise((resolve) => {
       const img = new Image();
@@ -315,7 +320,32 @@ async function buatStrip() {
         ctx.fillText(`${i+1}`, x+15, y+35);
         resolve();
       };
-      img.src = stripPhotos[i];
+      if (!stripPhotos[i]) {
+
+ctx.fillStyle="#ffffff";
+
+ctx.fillRect(
+50,
+yBase,
+700,
+tinggiFoto
+);
+
+ctx.fillStyle="#999";
+
+ctx.font="40px Poppins";
+
+ctx.fillText(
+"+ Ambil",
+400,
+yBase+250
+);
+
+continue;
+
+}
+
+img.src=stripPhotos[i];
     });
   }
 
@@ -356,9 +386,25 @@ async function buatStrip() {
   // Tampilkan hasil ke dalam <div id="hasilStrip">
   const resultImg = document.createElement("img");
   resultImg.src = canvas.toDataURL("image/png");
-  container.innerHTML = "";
-  container.appendChild(resultImg);
+  container.innerHTML="";
 
+container.appendChild(resultImg);
+
+for(let i=0;i<MAX_STRIP;i++){
+
+if(stripPhotos[i]){
+
+const btn=document.createElement("button");
+
+btn.innerText=`Retake ${i+1}`;
+
+btn.onclick=()=>retakeSlot(i);
+
+container.appendChild(btn);
+
+}
+
+}
   // Tombol download
   const downloadBtn = document.getElementById("downloadStripBtn");
   if (downloadBtn) {
