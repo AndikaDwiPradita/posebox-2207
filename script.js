@@ -154,6 +154,7 @@ function retakeSlot(index) {
   stripPhotos[index] = null;
   currentSlot = index;
   buatStrip();
+  alert(`Ambil ulang Frame ${index + 1}`);
 }
 
 // Fungsi utama membuat strip foto
@@ -286,20 +287,27 @@ async function buatStrip() {
   resultImg.src = canvas.toDataURL("image/png");
   container.innerHTML = "";
 
-  container.appendChild(resultImg);
+  const preview = document.createElement("div");
+  preview.className = "strip-preview";
+  preview.appendChild(resultImg);
+
+  // tombol X
+  for (let i = 0; i < MAX_STRIP; i++) {
+    if (stripPhotos[i]) {
+      const x = document.createElement("button");
+      x.className = "retake-x";
+      x.innerHTML = "✕";
+      x.style.top = `${145 + i * 570}px`;
+      x.onclick = () => retakeSlot(i);
+      preview.appendChild(x);
+    }
+  }
+
+  container.appendChild(preview);
 
   // WRAPPER tombol
   const retakeWrapper = document.createElement("div");
   retakeWrapper.className = "retake-wrapper";
-
-  for (let i = 0; i < MAX_STRIP; i++) {
-    if (stripPhotos[i]) {
-      const btn = document.createElement("button");
-      btn.innerText = `📸 ${i + 1}`;
-      btn.onclick = () => retakeSlot(i);
-      retakeWrapper.appendChild(btn);
-    }
-  }
 
   container.appendChild(retakeWrapper);
 
