@@ -144,16 +144,16 @@ function drawSticker(ctx, emoji, x, y, size) {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillStyle = "rgba(0,0,0,0.3)";
-  ctx.fillText(emoji, x+2, y+2);
+  ctx.fillText(emoji, x + 2, y + 2);
   ctx.fillStyle = "#ffffff";
   ctx.fillText(emoji, x, y);
 }
 
 // Retake foto tertentu
-function retakeSlot(index){
-stripPhotos[index]=null;
-currentSlot=index;
-buatStrip();
+function retakeSlot(index) {
+  stripPhotos[index] = null;
+  currentSlot = index;
+  buatStrip();
 }
 
 // Fungsi utama membuat strip foto
@@ -208,7 +208,7 @@ async function buatStrip() {
   ctx.fillStyle = textColor;
   ctx.font = "bold 44px 'Poppins', sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText("PoseBox", lebar/2, 70);
+  ctx.fillText("PoseBox", lebar / 2, 70);
 
   // 2. Gambar 3 foto (atau placeholder)
   for (let i = 0; i < MAX_STRIP; i++) {
@@ -220,7 +220,7 @@ async function buatStrip() {
       ctx.fillStyle = "#999";
       ctx.font = "40px 'Poppins'";
       ctx.textAlign = "center";
-      ctx.fillText("📷 Kosong", lebar/2, yBase + tinggiFoto/2);
+      ctx.fillText("📷 Kosong", lebar / 2, yBase + tinggiFoto / 2);
       continue;
     }
     await new Promise((resolve) => {
@@ -230,8 +230,14 @@ async function buatStrip() {
         const maxH = tinggiFoto - 30;
         let w = img.width;
         let h = img.height;
-        if (w > maxW) { h = (h * maxW) / w; w = maxW; }
-        if (h > maxH) { w = (w * maxH) / h; h = maxH; }
+        if (w > maxW) {
+          h = (h * maxW) / w;
+          w = maxW;
+        }
+        if (h > maxH) {
+          w = (w * maxH) / h;
+          h = maxH;
+        }
         const x = (lebar - w) / 2;
         const y = yBase + (tinggiFoto - h) / 2;
 
@@ -239,14 +245,14 @@ async function buatStrip() {
         ctx.shadowColor = "rgba(0,0,0,0.15)";
         ctx.shadowBlur = 12;
         ctx.fillStyle = "#fff";
-        ctx.fillRect(x-12, y-12, w+24, h+24);
+        ctx.fillRect(x - 12, y - 12, w + 24, h + 24);
         ctx.shadowBlur = 0;
         ctx.drawImage(img, x, y, w, h);
         ctx.restore();
 
         ctx.font = "bold 20px 'Poppins'";
         ctx.fillStyle = textColor;
-        ctx.fillText(`${i+1}`, x+15, y+35);
+        ctx.fillText(`${i + 1}`, x + 15, y + 35);
         resolve();
       };
       img.src = stripPhotos[i];
@@ -266,10 +272,14 @@ async function buatStrip() {
   }
 
   // Footer tanggal
-  const today = new Date().toLocaleDateString("id-ID", { day:'numeric', month:'long', year:'numeric' });
+  const today = new Date().toLocaleDateString("id-ID", {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
   ctx.font = "italic 16px 'Poppins'";
   ctx.fillStyle = textColor;
-  ctx.fillText(`dicapture • ${today}`, lebar/2, canvas.height-35);
+  ctx.fillText(`dicapture • ${today}`, lebar / 2, canvas.height - 35);
 
   // Tampilkan hasil strip
   const resultImg = document.createElement("img");
@@ -277,46 +287,21 @@ async function buatStrip() {
   container.innerHTML = "";
 
   container.appendChild(resultImg);
-  
+
   // WRAPPER tombol
-  const retakeWrapper =
-  document.createElement("div");
-  
-  retakeWrapper.className =
-  "retake-wrapper";
-  
-  for (
-  let i=0;
-  i<MAX_STRIP;
-  i++
-  ){
-  
-  if(stripPhotos[i]){
-  
-  const btn =
-  document.createElement(
-  "button"
-  );
-  
-  btn.innerText =
-  `📸 ${i+1}`;
-  
-  btn.onclick=
-  ()=>retakeSlot(i);
-  
-  retakeWrapper
-  .appendChild(
-  btn
-  );
-  
+  const retakeWrapper = document.createElement("div");
+  retakeWrapper.className = "retake-wrapper";
+
+  for (let i = 0; i < MAX_STRIP; i++) {
+    if (stripPhotos[i]) {
+      const btn = document.createElement("button");
+      btn.innerText = `📸 ${i + 1}`;
+      btn.onclick = () => retakeSlot(i);
+      retakeWrapper.appendChild(btn);
+    }
   }
-  
-  }
-  
-  container
-  .appendChild(
-  retakeWrapper
-  );
+
+  container.appendChild(retakeWrapper);
 
   // Tombol download
   const downloadBtn = document.getElementById("downloadStripBtn");
@@ -351,7 +336,9 @@ async function takeFoto() {
       if (flashEnabled) {
         const flash = document.getElementById("flash");
         flash.style.opacity = "1";
-        setTimeout(() => { flash.style.opacity = "0"; }, 100);
+        setTimeout(() => {
+          flash.style.opacity = "0";
+        }, 100);
       }
 
       // SOUND
@@ -371,13 +358,8 @@ async function takeFoto() {
       // Simpan ke stripPhotos di slot yang tersedia
       stripPhotos[currentSlot] = imageData;
       // cari slot kosong berikutnya
-      const next = stripPhotos.findIndex(
-        p => p === null
-        );
-        currentSlot =
-        next === -1
-        ? MAX_STRIP
-        : next;
+      const next = stripPhotos.findIndex(p => p === null);
+      currentSlot = next === -1 ? MAX_STRIP : next;
 
       buatStrip();
       isTakingPhoto = false;
