@@ -300,7 +300,7 @@ for (let i = 0; i < MAX_STRIP; i++) {
     btn.innerHTML = "✕";
     btn.onclick = () => retakeSlot(i);
     // geser ke frame berikutnya
-    btn.style.transform = `translateY(${i * 570}px)`;
+    
     preview.appendChild(btn);
   }
 }
