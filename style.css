@@ -381,32 +381,26 @@ aside {
 }
 
 .strip-preview{
-
-position:relative;
-
-display:inline-block;
-
+  position:relative;
+  display:inline-block;
 }
 
-.retake-x {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: #ff5d9d;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 999;
+..retake-x{
+  position:absolute;
+  top:15px;
+  left:15px;
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:50%;
+  background:#ff5d9d;
+  color:white;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  z-index:99;
 }
 
 .retake-x:hover{
-
-transform:
-scale(
-1.08
-);
-
+  transform:scale(1.08);
 }

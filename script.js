@@ -300,11 +300,9 @@ async function buatStrip() {
     const btn = document.createElement("button");
     btn.className = "retake-x";
     btn.innerHTML = "✕";
-    // kiri atas tiap frame
-    btn.style.left = "55px";
-    btn.style.top = `${100 + (i * 525)}px`;
     btn.onclick = () => retakeSlot(i);
-    preview.appendChild(btn);
+    x.style.transform = `translateY(${i*570}px)`;
+    preview.appendChild(x););
   }
 }
 
