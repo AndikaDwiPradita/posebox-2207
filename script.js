@@ -302,7 +302,7 @@ async function buatStrip() {
     btn.innerHTML = "✕";
     // kiri atas tiap frame
     btn.style.left = "55px";
-    btn.style.top = `${135 + (i * 560)}px`;
+    btn.style.top = `${100 + (i * 525)}px`;
     btn.onclick = () => retakeSlot(i);
     preview.appendChild(btn);
   }
