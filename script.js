@@ -309,8 +309,8 @@ async function buatStrip() {
     x.innerHTML = "✕";
     const pos = framePositions[i];
     if (pos) {
-      x.style.left = `${pos.x + 10}px`;
-      x.style.top = `${pos.y + 10}px`;
+      x.style.left = `${pos.x + 5}px`;
+      x.style.top = `${pos.y + 5}px`;
     }
     x.onclick = () => retakeSlot(i);
     preview.appendChild(x);
