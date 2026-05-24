@@ -27,7 +27,6 @@ function gantiKamera() {
 }
 
 bukaKamera(currentMode);
-buatStrip();
 
 /* ===================================
 Timer
@@ -118,9 +117,8 @@ function closeTemplate() {
 function pilihTemplate(nama) {
   selectedTemplate = nama;
   closeTemplate();
-  if (stripPhotos.some(photo => photo !== null)) {
-    buatStrip();
-  }
+  
+  buatStrip();
 }
 
 // Fungsi untuk membuka/tutup popup stiker
@@ -154,7 +152,12 @@ function retakeSlot(index) {
   stripPhotos[index] = null;
   currentSlot = index;
   buatStrip();
-  alert(`Ambil ulang Frame ${index + 1}`);
+  countdownEl.style.display="block";
+  countdownEl.innerText= `Retake ${index+1}`;
+  setTimeout(()=>{
+    countdownEl.style.display= "none";
+  },
+  1000);
 }
 
 // Fungsi utama membuat strip foto
@@ -253,7 +256,7 @@ async function buatStrip() {
 
         ctx.font = "bold 20px 'Poppins'";
         ctx.fillStyle = textColor;
-        ctx.fillText(`${i + 1}`, x + 15, y + 35);
+        ctx.fillText(`${i + 1}`, x + 25, y + 45);
         resolve();
       };
       img.src = stripPhotos[i];
@@ -297,19 +300,14 @@ async function buatStrip() {
       const x = document.createElement("button");
       x.className = "retake-x";
       x.innerHTML = "✕";
-      x.style.top = `${145 + i * 570}px`;
+      x.style.top = `${160+i*570}px`;
+      x.style.left= `45px`;
       x.onclick = () => retakeSlot(i);
       preview.appendChild(x);
     }
   }
 
   container.appendChild(preview);
-
-  // WRAPPER tombol
-  const retakeWrapper = document.createElement("div");
-  retakeWrapper.className = "retake-wrapper";
-
-  container.appendChild(retakeWrapper);
 
   // Tombol download
   const downloadBtn = document.getElementById("downloadStripBtn");
