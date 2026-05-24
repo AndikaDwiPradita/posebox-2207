@@ -380,35 +380,51 @@ aside {
   transform: scale(1.05);
 }
 
-.retake-wrapper{
+.strip-preview{
 
-display:flex;
+position:relative;
 
-justify-content:center;
-
-gap:10px;
-
-margin-top:20px;
-
-flex-wrap:wrap;
+display:inline-block;
 
 }
 
-.retake-wrapper button{
-padding:10px 16px;
+.retake-x{
+
+position:absolute;
+
+left:18px;
+
+width:38px;
+
+height:38px;
+
 border:none;
-border-radius:14px;
-background:pink;
+
+border-radius:50%;
+
+background:#ff5d9d;
+
 color:white;
 
-font-size:1rem;
+font-size:1.2rem;
+
+font-weight:bold;
 
 cursor:pointer;
 
+box-shadow:
+0 4px 12px
+rgba(0,0,0,.25);
+
+z-index:999;
+
 }
 
-.retake-wrapper button:hover{
+.retake-x:hover{
 
-transform:scale(1.05);
+transform:
+scale(
+1.08
+);
 
 }
