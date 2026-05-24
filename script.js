@@ -131,8 +131,7 @@ document.getElementById("closeStickerPopup").onclick = () => {
 function pilihStiker(emoji) {
   activeSticker = emoji;
   document.getElementById("stickerPopup").style.display = "none";
-    buatStrip();
-  }
+  buatStrip();
 }
 
 // Fungsi menggambar stiker ke canvas

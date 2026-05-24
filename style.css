@@ -385,7 +385,7 @@ aside {
   display:inline-block;
 }
 
-..retake-x{
+.retake-x{
   position:absolute;
   top:15px;
   left:15px;
@@ -402,5 +402,5 @@ aside {
 }
 
 .retake-x:hover{
-  transform:scale(1.08);
+  opacity: .9;
 }
