@@ -388,32 +388,7 @@ display:inline-block;
 
 }
 
-.retake-x{
-
-position:absolute;
-
-width:28px;
-
-height:28px;
-
-border:none;
-
-border-radius:50%;
-
-font-size:.9rem;
-
-font-weight:bold;
-
-background:#ff5d9d;
-
-color:white;
-
-cursor:pointer;
-
-z-index:10;
-
-}
-
+.
 .retake-x:hover{
 
 transform:
