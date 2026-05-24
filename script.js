@@ -167,6 +167,7 @@ async function buatStrip() {
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+  const framePositions = [];
   const lebar = 800;
   const tinggiFoto = 540;
   const jarak = 30;
@@ -244,6 +245,12 @@ async function buatStrip() {
         }
         const x = (lebar - w) / 2;
         const y = yBase + (tinggiFoto - h) / 2;
+        framePositions[i] = {
+          x,
+          y,
+          w,
+          h
+        };
 
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.15)";
@@ -297,14 +304,16 @@ async function buatStrip() {
   // tombol X
   for (let i = 0; i < MAX_STRIP; i++) {
   if (stripPhotos[i]) {
-    const btn = document.createElement("button");
-    btn.className = "retake-x";
-    btn.innerHTML = "✕";
-    // sejajar sama nomor frame
-    btn.style.top = `${165 + i * 570}px`;
-    btn.style.left = "150px";
-    btn.onclick = () => retakeSlot(i);
-    preview.appendChild(btn);
+    const x = document.createElement("button");
+    x.className = "retake-x";
+    x.innerHTML = "✕";
+    const pos = framePositions[i];
+    if (pos) {
+      x.style.left = `${pos.x + 10}px`;
+      x.style.top = `${pos.y + 10}px`;
+    }
+    x.onclick = () => retakeSlot(i);
+    preview.appendChild(x);
   }
 }
 
