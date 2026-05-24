@@ -275,17 +275,48 @@ async function buatStrip() {
   const resultImg = document.createElement("img");
   resultImg.src = canvas.toDataURL("image/png");
   container.innerHTML = "";
-  container.appendChild(resultImg);
 
-  // Tombol retake untuk setiap slot yang sudah terisi
-  for (let i = 0; i < MAX_STRIP; i++) {
-    if (stripPhotos[i]) {
-      const btn = document.createElement("button");
-      btn.innerText = `Retake ${i+1}`;
-      btn.onclick = () => retakeSlot(i);
-      container.appendChild(btn);
-    }
+  container.appendChild(resultImg);
+  
+  // WRAPPER tombol
+  const retakeWrapper =
+  document.createElement("div");
+  
+  retakeWrapper.className =
+  "retake-wrapper";
+  
+  for (
+  let i=0;
+  i<MAX_STRIP;
+  i++
+  ){
+  
+  if(stripPhotos[i]){
+  
+  const btn =
+  document.createElement(
+  "button"
+  );
+  
+  btn.innerText =
+  `📸 ${i+1}`;
+  
+  btn.onclick=
+  ()=>retakeSlot(i);
+  
+  retakeWrapper
+  .appendChild(
+  btn
+  );
+  
   }
+  
+  }
+  
+  container
+  .appendChild(
+  retakeWrapper
+  );
 
   // Tombol download
   const downloadBtn = document.getElementById("downloadStripBtn");

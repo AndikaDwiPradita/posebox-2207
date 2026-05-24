@@ -379,3 +379,36 @@ aside {
   background: pink;
   transform: scale(1.05);
 }
+
+.retake-wrapper{
+
+display:flex;
+
+justify-content:center;
+
+gap:10px;
+
+margin-top:20px;
+
+flex-wrap:wrap;
+
+}
+
+.retake-wrapper button{
+padding:10px 16px;
+border:none;
+border-radius:14px;
+background:pink;
+color:white;
+
+font-size:1rem;
+
+cursor:pointer;
+
+}
+
+.retake-wrapper button:hover{
+
+transform:scale(1.05);
+
+}
