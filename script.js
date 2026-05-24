@@ -295,14 +295,15 @@ async function buatStrip() {
   preview.appendChild(resultImg);
 
   // tombol X
-  for (let i = 0; i < MAX_STRIP; i++) {
+for (let i = 0; i < MAX_STRIP; i++) {
   if (stripPhotos[i]) {
     const btn = document.createElement("button");
     btn.className = "retake-x";
     btn.innerHTML = "✕";
     btn.onclick = () => retakeSlot(i);
-    x.style.transform = `translateY(${i*570}px)`;
-    preview.appendChild(x););
+    // geser ke frame berikutnya
+    btn.style.transform = `translateY(${i * 570}px)`;
+    preview.appendChild(btn);
   }
 }
 
