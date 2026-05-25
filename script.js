@@ -391,3 +391,26 @@ const imageData = canvas.toDataURL("image/png");
     }
   }, 1000);
 }
+
+
+// ===================================
+// TEMA WEBSITE (Global)
+// ===================================
+function openTemaPopup() {
+  document.getElementById("temaPopup").style.display = "flex";
+}
+function closeTemaPopup() {
+  document.getElementById("temaPopup").style.display = "none";
+}
+function pilihTema(tema) {
+  if (tema === "creammaroon") {
+    document.body.classList.add("tema-creammaroon");
+    document.body.classList.remove("tema-pink");
+  } else {
+    document.body.classList.add("tema-pink");
+    document.body.classList.remove("tema-creammaroon");
+  }
+  closeTemaPopup();
+}
+// Set tema default pink
+document.body.classList.add("tema-pink");
