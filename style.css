@@ -400,6 +400,18 @@ aside {
   z-index:99;
 }
 
+.retake-x[data-index="0"]{
+    top:145px;
+}
+
+.retake-x[data-index="1"]{
+    top:715px;
+}
+
+.retake-x[data-index="2"]{
+    top:1285px;
+}
+
 .retake-x:hover{
   opacity: .9;
 }
