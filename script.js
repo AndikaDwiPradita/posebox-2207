@@ -292,21 +292,29 @@ async function buatStrip() {
   preview.className = "strip-preview";
   preview.appendChild(resultImg);
 
-  // tombol X
+// Buat wrapper tombol retake di bawah gambar (tidak di atas gambar)
+const retakeContainer = document.createElement("div");
+retakeContainer.style.display = "flex";
+retakeContainer.style.justifyContent = "center";
+retakeContainer.style.gap = "10px";
+retakeContainer.style.marginTop = "10px";
+
 for (let i = 0; i < MAX_STRIP; i++) {
   if (stripPhotos[i]) {
     const btn = document.createElement("button");
-    btn.className = "retake-x";
-    btn.innerHTML = "✕";
-    // Hitung ulang posisi Y setiap frame (sama persis dengan saat menggambar foto)
-    const yBase = 40 + i * (tinggiFoto + jarak);  // tinggiFoto=540, jarak=30
-    btn.style.top = (yBase + 10) + "px";
-    btn.style.left = "20px";
+    btn.innerText = `📸 Retake ${i+1}`;
+    btn.style.padding = "5px 12px";
+    btn.style.borderRadius = "20px";
+    btn.style.border = "none";
+    btn.style.background = "#ff5d9d";
+    btn.style.color = "white";
+    btn.style.fontWeight = "bold";
     btn.onclick = () => retakeSlot(i);
-    preview.appendChild(btn);
+    retakeContainer.appendChild(btn);
   }
 }
 
+container.appendChild(retakeContainer);
   container.appendChild(preview);
 
   // Tombol download
