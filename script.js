@@ -298,11 +298,11 @@ for (let i = 0; i < MAX_STRIP; i++) {
     const btn = document.createElement("button");
     btn.className = "retake-x";
     btn.innerHTML = "✕";
-    btn.style.transform = `translateY(${i * 570}px)`;
-    btn.style.top = '0'; // reset
+    // Hitung ulang posisi Y setiap frame (sama persis dengan saat menggambar foto)
+    const yBase = 140 + i * (tinggiFoto + jarak);  // tinggiFoto=540, jarak=30
+    btn.style.top = (yBase + 10) + "px";
+    btn.style.left = "20px";
     btn.onclick = () => retakeSlot(i);
-    // geser ke frame berikutnya
-    
     preview.appendChild(btn);
   }
 }
