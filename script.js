@@ -297,7 +297,6 @@ for (let i = 0; i < MAX_STRIP; i++) {
   if (stripPhotos[i]) {
     const btn = document.createElement("button");
     btn.className = "retake-x";
-    btn.dataset.index = i;
     btn.innerHTML = "✕";
     btn.onclick = () => retakeSlot(i);
     // geser ke frame berikutnya
