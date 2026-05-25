@@ -16,6 +16,7 @@ async function bukaKamera(mode) {
     });
     video.srcObject = stream;
     await video.play();
+    applyMirror();
   } catch (err) {
     alert(err.message);
   }
@@ -24,6 +25,16 @@ async function bukaKamera(mode) {
 function gantiKamera() {
   currentMode = currentMode === "user" ? "environment" : "user";
   bukaKamera(currentMode);
+}
+
+function applyMirror() {
+  if (currentMode === "user") {
+    // Kamera depan: balik secara visual agar tidak mirror
+    video.style.transform = "scaleX(-1)";
+  } else {
+    // Kamera belakang: normal
+    video.style.transform = "scaleX(1)";
+  }
 }
 
 bukaKamera(currentMode);
@@ -354,13 +365,20 @@ async function takeFoto() {
       }
 
       // Ambil gambar dari video
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const context = canvas.getContext("2d");
-      context.filter = video.style.filter;
-      context.drawImage(video, 0, 0);
-      const imageData = canvas.toDataURL("image/png");
+const canvas = document.createElement("canvas");
+canvas.width = video.videoWidth;
+canvas.height = video.videoHeight;
+const context = canvas.getContext("2d");
+
+// Jika kamera depan, balik canvas secara horizontal
+if (currentMode === "user") {
+  context.translate(canvas.width, 0);
+  context.scale(-1, 1);
+}
+
+context.filter = video.style.filter;
+context.drawImage(video, 0, 0);
+const imageData = canvas.toDataURL("image/png");
 
       // Simpan ke stripPhotos di slot yang tersedia
       stripPhotos[currentSlot] = imageData;
