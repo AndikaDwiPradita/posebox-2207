@@ -299,7 +299,7 @@ for (let i = 0; i < MAX_STRIP; i++) {
     btn.className = "retake-x";
     btn.innerHTML = "✕";
     // Hitung ulang posisi Y setiap frame (sama persis dengan saat menggambar foto)
-    const yBase = 140 + i * (tinggiFoto + jarak);  // tinggiFoto=540, jarak=30
+    const yBase = 40 + i * (tinggiFoto + jarak);  // tinggiFoto=540, jarak=30
     btn.style.top = (yBase + 10) + "px";
     btn.style.left = "20px";
     btn.onclick = () => retakeSlot(i);
