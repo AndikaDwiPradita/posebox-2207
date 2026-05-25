@@ -382,11 +382,12 @@ aside {
 
 .strip-preview{
   position:relative;
-  display:block;
+  display:inline-block;
 }
 
 .retake-x{
   position:absolute;
+  left:18px;
   width:34px;
   height:34px;
   border:none;
@@ -401,4 +402,39 @@ aside {
 
 .retake-x:hover{
   opacity: .9;
+}
+
+/* Tema Cream Maroon */
+body.tema-creammaroon .navbar {
+  background-color: #800020; /* maroon */
+}
+body.tema-creammaroon .navbar h1 {
+  color: #FFF8E7; /* cream */
+}
+body.tema-creammaroon .posebox,
+body.tema-creammaroon aside,
+body.tema-creammaroon .fitur,
+body.tema-creammaroon .timer button,
+body.tema-creammaroon .tombol button,
+body.tema-creammaroon .fitur button {
+  background: rgba(128, 0, 32, 0.15); /* maroon transparan */
+  backdrop-filter: blur(12px);
+  border-color: #800020;
+}
+body.tema-creammaroon .timer button.active {
+  background: #800020;
+  color: #FFF8E7;
+  border-color: #FFF8E7;
+}
+body.tema-creammaroon .fitur button:hover,
+body.tema-creammaroon .filter-list button:hover {
+  background: #800020;
+  color: #FFF8E7;
+}
+body.tema-creammaroon #downloadStripBtn {
+  background: #800020;
+  color: #FFF8E7;
+}
+body.tema-creammaroon #downloadStripBtn:hover {
+  background: #a02840;
 }
