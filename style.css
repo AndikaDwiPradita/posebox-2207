@@ -404,7 +404,10 @@ aside {
   opacity: .9;
 }
 
-/* Tema Cream Maroon */
+/* Tema Cream Maroon - Background cream, elemen maroon */
+body.tema-creammaroon {
+  background-color: #FFF8E7; /* cream sebagai background utama */
+}
 body.tema-creammaroon .navbar {
   background-color: #800020; /* maroon */
 }
@@ -413,18 +416,22 @@ body.tema-creammaroon .navbar h1 {
 }
 body.tema-creammaroon .posebox,
 body.tema-creammaroon aside,
-body.tema-creammaroon .fitur,
+body.tema-creammaroon .fitur {
+  background: rgba(255, 248, 231, 0.9); /* cream transparan */
+  border: 1px solid #800020; /* border maroon */
+  backdrop-filter: blur(4px);
+}
 body.tema-creammaroon .timer button,
 body.tema-creammaroon .tombol button,
 body.tema-creammaroon .fitur button {
-  background: rgba(128, 0, 32, 0.15); /* maroon transparan */
-  backdrop-filter: blur(12px);
-  border-color: #800020;
+  background: #FFF8E7;
+  border: 1px solid #800020;
+  color: #800020;
 }
 body.tema-creammaroon .timer button.active {
   background: #800020;
   color: #FFF8E7;
-  border-color: #FFF8E7;
+  border-color: #800020;
 }
 body.tema-creammaroon .fitur button:hover,
 body.tema-creammaroon .filter-list button:hover {
@@ -434,7 +441,28 @@ body.tema-creammaroon .filter-list button:hover {
 body.tema-creammaroon #downloadStripBtn {
   background: #800020;
   color: #FFF8E7;
+  border: none;
 }
 body.tema-creammaroon #downloadStripBtn:hover {
   background: #a02840;
+}
+body.tema-creammaroon .hapus-btn {
+  background: #800020;
+}
+body.tema-creammaroon .retake-x {
+  background: #800020;
+}
+body.tema-creammaroon .sticker-list button:hover {
+  background: #800020;
+  color: white;
+}
+body.tema-creammaroon .filter-list button {
+  background: #FFF8E7;
+  color: #800020;
+  border: 1px solid #800020;
+}
+body.tema-creammaroon .popup-content button {
+  background: #800020;
+  color: #FFF8E7;
+  border: none;
 }
