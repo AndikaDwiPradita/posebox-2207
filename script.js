@@ -308,7 +308,6 @@ resultImg.onload = () => {
     }
   }
 };
-container.appendChild(retakeContainer);
   container.appendChild(preview);
 
   // Tombol download
