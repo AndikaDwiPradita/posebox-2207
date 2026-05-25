@@ -298,7 +298,8 @@ for (let i = 0; i < MAX_STRIP; i++) {
     const btn = document.createElement("button");
     btn.className = "retake-x";
     btn.innerHTML = "✕";
-    btn.style.top = '0';
+    btn.style.transform = `translateY(${i * 570}px)`;
+    btn.style.top = '0'; // reset
     btn.onclick = () => retakeSlot(i);
     // geser ke frame berikutnya
     
