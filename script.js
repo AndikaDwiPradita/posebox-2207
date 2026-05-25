@@ -292,28 +292,22 @@ async function buatStrip() {
   preview.className = "strip-preview";
   preview.appendChild(resultImg);
 
-// Buat wrapper tombol retake di bawah gambar (tidak di atas gambar)
-const retakeContainer = document.createElement("div");
-retakeContainer.style.display = "flex";
-retakeContainer.style.justifyContent = "center";
-retakeContainer.style.gap = "10px";
-retakeContainer.style.marginTop = "10px";
-
-for (let i = 0; i < MAX_STRIP; i++) {
-  if (stripPhotos[i]) {
-    const btn = document.createElement("button");
-    btn.innerText = `📸 Retake ${i+1}`;
-    btn.style.padding = "5px 12px";
-    btn.style.borderRadius = "20px";
-    btn.style.border = "none";
-    btn.style.background = "#ff5d9d";
-    btn.style.color = "white";
-    btn.style.fontWeight = "bold";
-    btn.onclick = () => retakeSlot(i);
-    retakeContainer.appendChild(btn);
+// Tunggu gambar termuat agar ukuran akurat
+resultImg.onload = () => {
+  const scale = resultImg.clientHeight / canvas.height; // faktor skala tinggi
+  for (let i = 0; i < MAX_STRIP; i++) {
+    if (stripPhotos[i]) {
+      const btn = document.createElement("button");
+      btn.className = "retake-x";
+      btn.innerHTML = "✕";
+      const yBase = 140 + i * (tinggiFoto + jarak);
+      btn.style.left = (20 * scale) + "px";
+      btn.style.top = ((yBase + 10) * scale) + "px";
+      btn.onclick = () => retakeSlot(i);
+      preview.appendChild(btn);
+    }
   }
-}
-
+};
 container.appendChild(retakeContainer);
   container.appendChild(preview);
 
