@@ -382,12 +382,11 @@ aside {
 
 .strip-preview{
   position:relative;
-  display:inline-block;
+  display:block;
 }
 
 .retake-x{
   position:absolute;
-  left:18px;
   width:34px;
   height:34px;
   border:none;
