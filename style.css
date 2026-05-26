@@ -461,32 +461,37 @@ body.tema-pink .filter-list button {
   border: 1px solid #ffb3c6;
 }
 
-/* Tema Cream Maroon */
+/* Tema Cream Maroon - background cream, elemen maroon */
+body.tema-creammaroon {
+  background-color: #FFF8E7; /* cream sebagai background utama */
+}
 body.tema-creammaroon .navbar {
-  background-color: #800020; /* maroon */
+  background-color: #800020;
 }
 body.tema-creammaroon .navbar h1 {
-  color: #FFF8E7; /* cream */
+  color: #FFF8E7;
 }
 body.tema-creammaroon .posebox,
 body.tema-creammaroon aside,
-body.tema-creammaroon .fitur,
+body.tema-creammaroon .fitur {
+  background: rgba(255, 248, 231, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid #800020;
+}
 body.tema-creammaroon .timer button,
 body.tema-creammaroon .tombol button,
 body.tema-creammaroon .fitur button {
-  background: rgba(128, 0, 32, 0.15); /* maroon transparan */
-  backdrop-filter: blur(12px);
+  background: #FFF8E7;
+  border: 1px solid #800020;
+  color: #800020;
+}
+body.tema-creammaroon .timer button.active,
+body.tema-creammaroon .timer button:hover,
+body.tema-creammaroon .tombol button:hover,
+body.tema-creammaroon .fitur button:hover {
+  background: #800020;
+  color: #FFF8E7;
   border-color: #800020;
-}
-body.tema-creammaroon .timer button.active {
-  background: #800020;
-  color: #FFF8E7;
-  border-color: #FFF8E7;
-}
-body.tema-creammaroon .fitur button:hover,
-body.tema-creammaroon .filter-list button:hover {
-  background: #800020;
-  color: #FFF8E7;
 }
 body.tema-creammaroon #downloadStripBtn {
   background: #800020;
@@ -494,4 +499,25 @@ body.tema-creammaroon #downloadStripBtn {
 }
 body.tema-creammaroon #downloadStripBtn:hover {
   background: #a02840;
+}
+body.tema-creammaroon .hapus-btn,
+body.tema-creammaroon .retake-x {
+  background: #800020;
+}
+body.tema-creammaroon .filter-list button {
+  background: #FFF8E7;
+  color: #800020;
+  border: 1px solid #800020;
+}
+body.tema-creammaroon .filter-list button:hover {
+  background: #800020;
+  color: #FFF8E7;
+}
+body.tema-creammaroon .sticker-list button {
+  background: #FFF8E7;
+  border: 1px solid #800020;
+}
+body.tema-creammaroon .sticker-list button:hover {
+  background: #800020;
+  color: white;
 }
