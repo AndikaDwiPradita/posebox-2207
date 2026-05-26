@@ -416,7 +416,7 @@ function pilihTema(tema) {
 document.body.classList.add("tema-pink");
 
 
-// Upload gambar dari galeri
+// ========== UPLOAD GAMBAR DARI GALERI ==========
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("fileInput");
 
@@ -428,19 +428,24 @@ fileInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (!file) return;
   if (!file.type.startsWith("image/")) {
-    alert("File harus berupa gambar");
+    alert("File harus berupa gambar!");
     return;
   }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     const imageData = e.target.result;
-    // Simpan ke stripPhotos di slot kosong
+
+    // Cek apakah masih ada slot kosong di strip
     if (currentSlot >= MAX_STRIP) {
-      alert("Semua frame sudah terisi. Gunakan Retake jika ingin mengganti.");
+      alert("Semua frame sudah terisi. Gunakan tombol '✕' (Retake) untuk mengganti foto.");
       return;
     }
+
+    // Simpan ke stripPhotos di slot yang tersedia
     stripPhotos[currentSlot] = imageData;
-    // Tampilkan preview kecil di #hasil
+
+    // Tampilkan preview kecil di #hasil (opsional, biar konsisten dengan kamera)
     const fotoItem = document.createElement("div");
     fotoItem.classList.add("foto-item");
     const img = document.createElement("img");
@@ -448,15 +453,18 @@ fileInput.addEventListener("change", (event) => {
     const hapusBtn = document.createElement("button");
     hapusBtn.innerHTML = "✖";
     hapusBtn.classList.add("hapus-btn");
-    hapusBtn.onclick = () => fotoItem.remove();
+    hapusBtn.onclick = () => fotoItem.remove(); // hapus preview saja, tidak hapus strip (bisa diatur lebih lanjut)
     fotoItem.appendChild(img);
     fotoItem.appendChild(hapusBtn);
     document.getElementById("hasil").prepend(fotoItem);
+
     // Update currentSlot ke slot kosong berikutnya
     const next = stripPhotos.findIndex(p => p === null);
     currentSlot = next === -1 ? MAX_STRIP : next;
+
+    // Refresh strip
     buatStrip();
   };
   reader.readAsDataURL(file);
-  fileInput.value = ""; // reset input
+  fileInput.value = ""; // reset input agar bisa upload file yang sama lagi
 });
