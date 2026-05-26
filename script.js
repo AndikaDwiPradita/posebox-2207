@@ -414,3 +414,49 @@ function pilihTema(tema) {
 }
 // Set tema default pink
 document.body.classList.add("tema-pink");
+
+
+// Upload gambar dari galeri
+const uploadBtn = document.getElementById("uploadBtn");
+const fileInput = document.getElementById("fileInput");
+
+uploadBtn.addEventListener("click", () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    alert("File harus berupa gambar");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const imageData = e.target.result;
+    // Simpan ke stripPhotos di slot kosong
+    if (currentSlot >= MAX_STRIP) {
+      alert("Semua frame sudah terisi. Gunakan Retake jika ingin mengganti.");
+      return;
+    }
+    stripPhotos[currentSlot] = imageData;
+    // Tampilkan preview kecil di #hasil
+    const fotoItem = document.createElement("div");
+    fotoItem.classList.add("foto-item");
+    const img = document.createElement("img");
+    img.src = imageData;
+    const hapusBtn = document.createElement("button");
+    hapusBtn.innerHTML = "✖";
+    hapusBtn.classList.add("hapus-btn");
+    hapusBtn.onclick = () => fotoItem.remove();
+    fotoItem.appendChild(img);
+    fotoItem.appendChild(hapusBtn);
+    document.getElementById("hasil").prepend(fotoItem);
+    // Update currentSlot ke slot kosong berikutnya
+    const next = stripPhotos.findIndex(p => p === null);
+    currentSlot = next === -1 ? MAX_STRIP : next;
+    buatStrip();
+  };
+  reader.readAsDataURL(file);
+  fileInput.value = ""; // reset input
+});
