@@ -350,39 +350,35 @@ async function takeFoto() {
       clearInterval(timer);
       countdownEl.style.display = "none";
 
-      // FLASH
       if (flashEnabled) {
         const flash = document.getElementById("flash");
         flash.style.opacity = "1";
-        setTimeout(() => {
-          flash.style.opacity = "0";
-        }, 100);
+        setTimeout(() => { flash.style.opacity = "0"; }, 100);
       }
-
-      // SOUND
       if (soundEnabled) {
         document.getElementById("shutter").play().catch(() => {});
       }
 
-      // Ambil gambar dari video
-const canvas = document.createElement("canvas");
-canvas.width = video.videoWidth;
-canvas.height = video.videoHeight;
-const context = canvas.getContext("2d");
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const context = canvas.getContext("2d");
 
-// Jika kamera depan, balik canvas secara horizontal
-if (currentMode === "user") {
-  context.translate(canvas.width, 0);
-  context.scale(-1, 1);
-}
+      if (currentMode === "user") {
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1);
+      }
+      context.filter = video.style.filter;
+      context.drawImage(video, 0, 0);
+      const imageData = canvas.toDataURL("image/png");
 
-context.filter = video.style.filter;
-context.drawImage(video, 0, 0);
-const imageData = canvas.toDataURL("image/png");
-
-      // Simpan ke stripPhotos di slot yang tersedia
+      // Simpan langsung ke strip
+      if (currentSlot >= MAX_STRIP) {
+        alert("Semua frame terisi. Gunakan retake.");
+        isTakingPhoto = false;
+        return;
+      }
       stripPhotos[currentSlot] = imageData;
-      // cari slot kosong berikutnya
       const next = stripPhotos.findIndex(p => p === null);
       currentSlot = next === -1 ? MAX_STRIP : next;
 
@@ -428,7 +424,7 @@ fileInput.addEventListener("change", (event) => {
   const file = event.target.files[0];
   if (!file) return;
   if (!file.type.startsWith("image/")) {
-    alert("File harus berupa gambar!");
+    alert("File harus gambar!");
     return;
   }
 
@@ -436,22 +432,15 @@ fileInput.addEventListener("change", (event) => {
   reader.onload = function(e) {
     const imageData = e.target.result;
 
-    // Cek apakah masih ada slot kosong di strip
     if (currentSlot >= MAX_STRIP) {
-      alert("Semua frame sudah terisi. Gunakan tombol '✕' (Retake) untuk mengganti foto.");
+      alert("Semua frame terisi. Gunakan retake.");
       return;
     }
-
-    // Simpan ke stripPhotos di slot yang tersedia
     stripPhotos[currentSlot] = imageData;
-
-    // Update currentSlot ke slot kosong berikutnya
     const next = stripPhotos.findIndex(p => p === null);
     currentSlot = next === -1 ? MAX_STRIP : next;
-
-    // Langsung refresh strip (tanpa menampilkan preview di #hasil)
     buatStrip();
   };
   reader.readAsDataURL(file);
-  fileInput.value = ""; // reset input
+  fileInput.value = "";
 });
