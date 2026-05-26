@@ -38,7 +38,7 @@
               <button onclick="openTemplatePopup()"><i class="fa-solid fa-border-all"></i><p>Template</p></button>
               <button onclick="openStickerPopup()"><i class="fa-regular fa-face-smile"></i><p>Stiker</p></button>
               <button onclick="openFilterPopup()"><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
-              <button onclick="openTemaPopup()"><i class="fa-solid fa-palette"></i><p>Tema</p></button>
+              <button><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
           </section>
         </div>
@@ -49,6 +49,8 @@
       <aside>
         <div class="aside-wrapper">
           <h1>Hasil Jepret</h1>
+          <button id="uploadBtn" style="background: #ff99cc; margin: 5px;"><i class="fa-solid fa-upload"></i> Upload Gambar</button>
+          <input type="file" id="fileInput" accept="image/*" style="display: none;">
           
           <div id="hasil"></div>
           <div id="hasilStrip"></div>
