@@ -439,6 +439,17 @@ body.tema-pink .fitur button:hover {
   color: white;
   border-color: #ff6699;
 }
+body.tema-pink #uploadBtn {
+  background: linear-gradient(45deg, #ff99bb, #ffb3c6);
+  color: #b34180;
+  border: none;
+  margin: 5px;
+  font-weight: bold;
+}
+body.tema-pink #uploadBtn:hover {
+  background: #ff80aa;
+  color: white;
+}
 body.tema-pink #downloadStripBtn {
   background: linear-gradient(45deg, #ff99bb, #ffb3c6);
   color: #b34180;
@@ -503,6 +514,14 @@ body.tema-creammaroon #downloadStripBtn {
 body.tema-creammaroon #downloadStripBtn:hover {
   background: #a02840;
 }
+body.tema-creammaroon #uploadBtn {
+  background: #800020;
+  color: #FFF8E7;
+  border: none;
+}
+body.tema-creammaroon #uploadBtn:hover {
+  background: #a02840;
+}
 body.tema-creammaroon .hapus-btn {
   background: #800020;
 }
@@ -522,4 +541,4 @@ body.tema-creammaroon .popup-content button {
   background: #800020;
   color: #FFF8E7;
   border: none;
-}
+    }
