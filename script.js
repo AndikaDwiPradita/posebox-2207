@@ -416,7 +416,7 @@ function pilihTema(tema) {
 document.body.classList.add("tema-pink");
 
 
-// ========== UPLOAD GAMBAR DARI GALERI ==========
+// ========== UPLOAD GAMBAR DARI GALERI (LANGSUNG KE STRIP) ==========
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("fileInput");
 
@@ -445,26 +445,13 @@ fileInput.addEventListener("change", (event) => {
     // Simpan ke stripPhotos di slot yang tersedia
     stripPhotos[currentSlot] = imageData;
 
-    // Tampilkan preview kecil di #hasil (opsional, biar konsisten dengan kamera)
-    const fotoItem = document.createElement("div");
-    fotoItem.classList.add("foto-item");
-    const img = document.createElement("img");
-    img.src = imageData;
-    const hapusBtn = document.createElement("button");
-    hapusBtn.innerHTML = "✖";
-    hapusBtn.classList.add("hapus-btn");
-    hapusBtn.onclick = () => fotoItem.remove(); // hapus preview saja, tidak hapus strip (bisa diatur lebih lanjut)
-    fotoItem.appendChild(img);
-    fotoItem.appendChild(hapusBtn);
-    document.getElementById("hasil").prepend(fotoItem);
-
     // Update currentSlot ke slot kosong berikutnya
     const next = stripPhotos.findIndex(p => p === null);
     currentSlot = next === -1 ? MAX_STRIP : next;
 
-    // Refresh strip
+    // Langsung refresh strip (tanpa menampilkan preview di #hasil)
     buatStrip();
   };
   reader.readAsDataURL(file);
-  fileInput.value = ""; // reset input agar bisa upload file yang sama lagi
+  fileInput.value = ""; // reset input
 });
