@@ -564,17 +564,16 @@ async function buatThumbnailGambar(src, width = 120, height = 200) {
   });
 }
 
-// Buka popup template dengan grid thumbnail
+// Buka popup template dengan grid thumbnail (tanpa teks)
 async function openTemplatePopup() {
   const popup = document.getElementById("templatePopup");
   if (!popup) return;
   popup.style.display = "flex";
   
-  const content = popup.querySelector(".popup-content");
-  if (!content) return;
+  const grid = document.getElementById("templateGrid");
+  if (!grid) return;
   
-  // Cari semua tombol template (kecuali tombol "Tutup")
-  const buttons = content.querySelectorAll("button:not(:last-child)");
+  const buttons = grid.querySelectorAll("button");
   
   for (let i = 0; i < buttons.length && i < templateList.length; i++) {
     const btn = buttons[i];
@@ -586,16 +585,16 @@ async function openTemplatePopup() {
       } else {
         thumbData = await buatThumbnailWarna(tpl.id);
       }
-      const originalText = btn.innerText;
       btn.style.display = "flex";
       btn.style.flexDirection = "column";
       btn.style.alignItems = "center";
-      btn.style.gap = "5px";
+      btn.style.justifyContent = "center";
       btn.style.padding = "8px";
-      btn.innerHTML = `
-        <img src="${thumbData}" style="width:80px; height:auto; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-        <span style="font-size:0.7rem;">${originalText}</span>
-      `;
+      btn.style.background = "#f5f5f5";
+      btn.style.border = "1px solid #ddd";
+      btn.style.borderRadius = "12px";
+      btn.style.cursor = "pointer";
+      btn.innerHTML = `<img src="${thumbData}" style="width:80px; height:auto; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
     }
   }
 }
