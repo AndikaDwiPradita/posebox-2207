@@ -159,8 +159,17 @@ const templateStikerBawaan = {
   "strip-5": "assets/sticker/sticker-5.png"
 };
 
+// Stiker overlay full canvas (ukuran 800x1890) - untuk digambar di atas foto
+const templateStiker = {
+  "strip-1": "assets/sticker/sticker-1.png",
+  "strip-2": "assets/sticker/sticker-2.png",
+  "strip-3": "assets/sticker/sticker-3.png",
+  "strip-4": "assets/sticker/sticker-4.png",
+  "strip-5": "assets/sticker/sticker-5.png"
+};
+
 // Untuk stiker yang diupload user (opsional, bisa emoji atau gambar custom nanti)
-let activeSticker = null;       // bisa berisi string emoji atau object { type: "image", src: "path" }
+let activeSticker = null;
 
 function openStickerPopup() {
   document.getElementById("stickerPopup").style.display = "flex";
@@ -174,24 +183,11 @@ function pilihStiker(emoji) {
   buatStrip();
 }
 
-function drawSticker(ctx, sticker, x, y) {
+function drawSticker(ctx, sticker, x, y, size = 70) {
   if (!sticker) return;
   
-  // Jika sticker berupa object gambar PNG
-  if (sticker.type === "image") {
-    const img = new Image();
-    img.src = sticker.src;
-    // Gambar di koordinat (x, y) dengan ukuran sticker.width, sticker.height
-    // Untuk menghindari async, kita gambar langsung karena gambar mungkin belum load.
-    // Cara terbaik: load gambar di awal (cache) atau gunakan await di buatStrip.
-    // Tapi untuk kemudahan, kita gambar di sini dengan gambar yang sudah di-cache.
-    // Kita perlu pastikan gambar termuat sebelum dipanggil. Alternatif: gambar di buatStrip dengan await.
-    // Saya akan modifikasi pemanggilan di buatStrip nanti.
-    ctx.drawImage(img, x, y, sticker.width, sticker.height);
-  } 
-  // Jika sticker berupa emoji (string)
-  else if (typeof sticker === "string") {
-    ctx.font = `70px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+  if (typeof sticker === "string") {
+    ctx.font = `${size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillStyle = "rgba(0,0,0,0.3)";
@@ -241,7 +237,6 @@ async function buatStrip() {
       case "dark": bgColor = "#1a1a2e"; textColor = "#eee"; break;
       case "retro": bgColor = "#f4e1c1"; textColor = "#6b3e1f"; break;
       case "minimal": bgColor = "#ffffff"; textColor = "#222"; break;
-      case "canva": bgColor = "gradient"; textColor = "#2d3436"; break;
       default: bgColor = "#ffe4ec"; textColor = "#b34180";
     }
     if (bgColor === "gradient") {
@@ -259,7 +254,6 @@ async function buatStrip() {
   for (let i = 0; i < MAX_STRIP; i++) {
     const yBase = 140 + i * (tinggiFoto + jarak);
     if (!stripPhotos[i]) {
-      // placeholder kosong
       ctx.fillStyle = "#eeeeee";
       ctx.fillRect(50, yBase, 700, tinggiFoto);
       ctx.fillStyle = "#999";
@@ -290,7 +284,7 @@ async function buatStrip() {
         ctx.restore();
 
         ctx.font = "bold 20px 'Poppins'";
-        ctx.fillStyle = "#333"; // warna teks nomor frame
+        ctx.fillStyle = "#333";
         ctx.fillText(`${i + 1}`, x + 25, y + 45);
         resolve();
       };
@@ -298,20 +292,27 @@ async function buatStrip() {
     });
   }
 
-  // 3. Stiker overlay (full PNG, ukuran canvas)
-  if (templateStiker && templateStiker[selectedTemplate]) {
+  // 3. Stiker overlay full canvas (gambar di ATAS foto)
+  if (templateStiker[selectedTemplate]) {
     const stikerImg = new Image();
     stikerImg.src = templateStiker[selectedTemplate];
     await new Promise((resolve) => {
       stikerImg.onload = () => {
-        // Gambar stiker menutupi seluruh canvas (ukuran 800x1890)
         ctx.drawImage(stikerImg, 0, 0, canvas.width, canvas.height);
         resolve();
       };
     });
   }
 
-  // 4. Footer tanggal (opsional, jika belum ada di stiker)
+  // 4. Stiker emoji (jika ada) - opsional
+  if (activeSticker && typeof activeSticker === "string") {
+    for (let i = 0; i < MAX_STRIP; i++) {
+      const yBase = 140 + i * (tinggiFoto + jarak);
+      drawSticker(ctx, activeSticker, 730, yBase + tinggiFoto - 60);
+    }
+  }
+
+  // 5. Footer tanggal
   const today = new Date().toLocaleDateString("id-ID", {
     day: 'numeric', month: 'long', year: 'numeric'
   });
@@ -355,6 +356,14 @@ async function buatStrip() {
     };
   }
 }
+
+// Perbaiki fungsi pilihTemplate
+function pilihTemplate(nama) {
+  selectedTemplate = nama;
+  closeTemplate();
+  buatStrip();
+}
+
 async function takeFoto() {
   if (isTakingPhoto) return;
   isTakingPhoto = true;
@@ -462,16 +471,21 @@ fileInput.addEventListener("change", (event) => {
   fileInput.value = "";
 });
 
-// ========== THUMBNAIL TEMPLATE (PREVIEW GAMBAR) ==========
+// Daftar semua template (warna + gambar PNG)
 const templateList = [
-  { id: "pink", label: "🌸 Pink", bg: "#ffe4ec", text: "#b34180" },
-  { id: "dark", label: "🖤 Dark", bg: "#1a1a2e", text: "#eee" },
-  { id: "retro", label: "📼 Retro", bg: "#f4e1c1", text: "#6b3e1f" },
-  { id: "minimal", label: "🤍 Minimal", bg: "#ffffff", text: "#222" }
+  { id: "pink", type: "color" },
+  { id: "dark", type: "color" },
+  { id: "retro", type: "color" },
+  { id: "minimal", type: "color" },
+  { id: "strip-1", type: "image", src: "assets/preview/preview-1.png" },
+  { id: "strip-2", type: "image", src: "assets/preview/preview-2.png" },
+  { id: "strip-3", type: "image", src: "assets/preview/preview-3.png" },
+  { id: "strip-4", type: "image", src: "assets/preview/preview-4.png" },
+  { id: "strip-5", type: "image", src: "assets/preview/preview-5.png" }
 ];
 
-// Fungsi membuat thumbnail (gambar kecil) untuk suatu template
-async function buatThumbnail(templateId, width = 120, height = 200) {
+// Fungsi membuat thumbnail untuk template warna (dengan canvas)
+async function buatThumbnailWarna(templateId, width = 120, height = 200) {
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -506,13 +520,11 @@ async function buatThumbnail(templateId, width = 120, height = 200) {
   }
   ctx.fillRect(0, 0, width, height);
 
-  // Judul kecil
   ctx.fillStyle = textColor;
   ctx.font = "bold 10px 'Poppins'";
   ctx.textAlign = "center";
   ctx.fillText("PoseBox", width/2, 15);
 
-  // 3 kotak foto kecil
   const boxW = width - 16;
   const boxH = 38;
   const gap = 5;
@@ -528,7 +540,31 @@ async function buatThumbnail(templateId, width = 120, height = 200) {
   return canvas.toDataURL();
 }
 
-// Ubah fungsi openTemplatePopup agar menampilkan thumbnail di tombol
+// Fungsi membuat thumbnail dari gambar PNG (template Canva)
+async function buatThumbnailGambar(src, width = 120, height = 200) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      // Gambar thumbnail dengan proporsi asli
+      const scale = Math.min(width / img.width, height / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      const x = (width - w) / 2;
+      const y = (height - h) / 2;
+      ctx.fillStyle = "#f0f0f0";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, x, y, w, h);
+      resolve(canvas.toDataURL());
+    };
+    img.src = src;
+  });
+}
+
+// Buka popup template dengan grid thumbnail
 async function openTemplatePopup() {
   const popup = document.getElementById("templatePopup");
   if (!popup) return;
@@ -540,12 +576,16 @@ async function openTemplatePopup() {
   // Cari semua tombol template (kecuali tombol "Tutup")
   const buttons = content.querySelectorAll("button:not(:last-child)");
   
-  for (let i = 0; i < buttons.length; i++) {
+  for (let i = 0; i < buttons.length && i < templateList.length; i++) {
     const btn = buttons[i];
     const tpl = templateList[i];
     if (tpl) {
-      const thumbData = await buatThumbnail(tpl.id);
-      // Simpan teks asli
+      let thumbData;
+      if (tpl.type === "image") {
+        thumbData = await buatThumbnailGambar(tpl.src);
+      } else {
+        thumbData = await buatThumbnailWarna(tpl.id);
+      }
       const originalText = btn.innerText;
       btn.style.display = "flex";
       btn.style.flexDirection = "column";
@@ -554,7 +594,7 @@ async function openTemplatePopup() {
       btn.style.padding = "8px";
       btn.innerHTML = `
         <img src="${thumbData}" style="width:80px; height:auto; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
-        <span style="font-size:0.8rem;">${originalText}</span>
+        <span style="font-size:0.7rem;">${originalText}</span>
       `;
     }
   }

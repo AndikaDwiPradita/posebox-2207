@@ -413,6 +413,15 @@ aside {
   overflow-y: auto;
   padding: 5px;
 }
+.template-grid button {
+  width: 100%;
+  min-height: 120px;
+}
+.template-grid button img {
+  width: 80px;
+  height: auto;
+  border-radius: 8px;
+}
 .template-item {
   cursor: pointer;
   text-align: center;
