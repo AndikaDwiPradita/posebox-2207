@@ -225,7 +225,7 @@ async function buatStrip() {
   canvas.width = lebar;
   canvas.height = tinggiTotal;
 
-  // Cek apakah template berupa gambar PNG dari Canva
+  // 1. Background (gambar template PNG atau warna)
   if (templateGambar[selectedTemplate]) {
     const bgImg = new Image();
     bgImg.src = templateGambar[selectedTemplate];
@@ -236,77 +236,38 @@ async function buatStrip() {
       };
     });
   } else {
-    // Jika bukan gambar, pakai warna solid/gradien
     let bgColor, textColor;
     switch (selectedTemplate) {
-      case "dark":
-        bgColor = "#1a1a2e";
-        textColor = "#eee";
-        break;
-      case "retro":
-        bgColor = "#f4e1c1";
-        textColor = "#6b3e1f";
-        break;
-      case "minimal":
-        bgColor = "#ffffff";
-        textColor = "#222";
-        break;
-      case "canva":
-        bgColor = "gradient";
-        textColor = "#2d3436";
-        break;
-      default:
-        bgColor = "#ffe4ec";
-        textColor = "#b34180";
+      case "dark": bgColor = "#1a1a2e"; textColor = "#eee"; break;
+      case "retro": bgColor = "#f4e1c1"; textColor = "#6b3e1f"; break;
+      case "minimal": bgColor = "#ffffff"; textColor = "#222"; break;
+      case "canva": bgColor = "gradient"; textColor = "#2d3436"; break;
+      default: bgColor = "#ffe4ec"; textColor = "#b34180";
     }
     if (bgColor === "gradient") {
       const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
       grad.addColorStop(0, "#fdebf7");
       grad.addColorStop(1, "#fff3e6");
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
     } else {
       ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
-    // Simpan textColor untuk digunakan nanti
-    window._tempTextColor = textColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
-  // Gunakan textColor yang sudah disimpan, atau untuk template gambar gunakan warna putih
-  let textColor = window._tempTextColor || "#fff";
-  if (templateGambar[selectedTemplate]) textColor = "#333"; // sesuaikan
-
-  // Judul (jika template gambar, mungkin tidak perlu, tapi tetap ditulis)
-  ctx.fillStyle = textColor;
-  ctx.font = "bold 44px 'Poppins', sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText("PoseBox", lebar / 2, 70);
-
-  // 2. Gambar 3 foto (atau placeholder)
+  // 2. Gambar 3 foto (di atas background)
   for (let i = 0; i < MAX_STRIP; i++) {
     const yBase = 140 + i * (tinggiFoto + jarak);
     if (!stripPhotos[i]) {
+      // placeholder kosong
       ctx.fillStyle = "#eeeeee";
       ctx.fillRect(50, yBase, 700, tinggiFoto);
       ctx.fillStyle = "#999";
       ctx.font = "40px 'Poppins'";
+      ctx.textAlign = "center";
       ctx.fillText("📷 Kosong", lebar / 2, yBase + tinggiFoto / 2);
       continue;
     }
-    
-    // Gambar stiker overlay (jika ada template stiker)
-if (templateStiker[selectedTemplate]) {
-  const stikerImg = new Image();
-  stikerImg.src = templateStiker[selectedTemplate];
-  await new Promise((resolve) => {
-    stikerImg.onload = () => {
-      ctx.drawImage(stikerImg, 0, 0, canvas.width, canvas.height);
-      resolve();
-    };
-  });
-}
-
     await new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
@@ -329,7 +290,7 @@ if (templateStiker[selectedTemplate]) {
         ctx.restore();
 
         ctx.font = "bold 20px 'Poppins'";
-        ctx.fillStyle = textColor;
+        ctx.fillStyle = "#333"; // warna teks nomor frame
         ctx.fillText(`${i + 1}`, x + 25, y + 45);
         resolve();
       };
@@ -337,50 +298,28 @@ if (templateStiker[selectedTemplate]) {
     });
   }
 
-  // 3. Stiker (jika ada)
-  if (activeSticker) {
-  // Jika activeSticker adalah object gambar
-  if (activeSticker.type === "image") {
-    // Load gambar stiker
-    const stickerImg = new Image();
-    stickerImg.src = activeSticker.src;
+  // 3. Stiker overlay (full PNG, ukuran canvas)
+  if (templateStiker && templateStiker[selectedTemplate]) {
+    const stikerImg = new Image();
+    stikerImg.src = templateStiker[selectedTemplate];
     await new Promise((resolve) => {
-      stickerImg.onload = () => {
-        // Tentukan posisi stiker (sesuai desain Canva Anda)
-        // Contoh: stiker diletakkan di pojok kanan atas setiap frame (x = 730, y = yBase + 60)
-        // Atau bisa juga hanya satu stiker besar di tengah strip? Sesuaikan.
-        for (let i = 0; i < MAX_STRIP; i++) {
-          const yBase = 140 + i * (tinggiFoto + jarak);
-          // Posisi: kanan atas frame (seperti emoji sebelumnya)
-          ctx.drawImage(stickerImg, 730, yBase + 60, activeSticker.width, activeSticker.height);
-          // Bisa juga tambah posisi lain jika perlu
-        }
+      stikerImg.onload = () => {
+        // Gambar stiker menutupi seluruh canvas (ukuran 800x1890)
+        ctx.drawImage(stikerImg, 0, 0, canvas.width, canvas.height);
         resolve();
       };
     });
-  } 
-  // Jika activeSticker adalah string emoji
-  else if (typeof activeSticker === "string") {
-    const ukuran = 70;
-    for (let i = 0; i < MAX_STRIP; i++) {
-      const yBase = 140 + i * (tinggiFoto + jarak);
-      drawSticker(ctx, activeSticker, 70, yBase + 60, ukuran);
-      drawSticker(ctx, activeSticker, 730, yBase + tinggiFoto - 60, ukuran);
-    }
   }
-}
 
-  // Footer tanggal
+  // 4. Footer tanggal (opsional, jika belum ada di stiker)
   const today = new Date().toLocaleDateString("id-ID", {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
+    day: 'numeric', month: 'long', year: 'numeric'
   });
   ctx.font = "italic 16px 'Poppins'";
-  ctx.fillStyle = textColor;
+  ctx.fillStyle = "#000";
   ctx.fillText(`dicapture • ${today}`, lebar / 2, canvas.height - 35);
 
-  // Tampilkan hasil strip
+  // Tampilkan ke container
   const resultImg = document.createElement("img");
   resultImg.src = canvas.toDataURL("image/png");
   container.innerHTML = "";
@@ -416,7 +355,6 @@ if (templateStiker[selectedTemplate]) {
     };
   }
 }
-
 async function takeFoto() {
   if (isTakingPhoto) return;
   isTakingPhoto = true;
