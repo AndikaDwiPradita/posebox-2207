@@ -29,10 +29,8 @@ function gantiKamera() {
 
 function applyMirror() {
   if (currentMode === "user") {
-    // Kamera depan: balik secara visual agar tidak mirror
     video.style.transform = "scaleX(-1)";
   } else {
-    // Kamera belakang: normal
     video.style.transform = "scaleX(1)";
   }
 }
@@ -116,9 +114,7 @@ let selectedTemplate = "pink";
 const MAX_STRIP = 3;
 let stripPhotos = [null, null, null];
 let currentSlot = 0;
-let activeSticker = null;
 
-// Fungsi untuk membuka/tutup popup template (background)
 function openTemplatePopup() {
   document.getElementById("templatePopup").style.display = "flex";
 }
@@ -127,12 +123,45 @@ function closeTemplate() {
 }
 function pilihTemplate(nama) {
   selectedTemplate = nama;
-  closeTemplate();
   
+  // Jika template ini punya stiker bawaan, aktifkan stiker tersebut
+  if (templateStikerBawaan[nama]) {
+    activeSticker = {
+      type: "image",
+      src: templateStikerBawaan[nama],
+      width: 80,   // sesuaikan dengan lebar stiker Anda (dalam pixel canvas)
+      height: 80   // sesuaikan
+    };
+  } else {
+    // Jika tidak ada stiker bawaan, biarkan activeSticker seperti sebelumnya (atau null)
+    // activeSticker = null; // hati-hati jangan hapus pilihan user sebelumnya
+  }
+  
+  closeTemplate();
   buatStrip();
 }
 
-// Fungsi untuk membuka/tutup popup stiker
+// Template gambar PNG (dari Canva)
+const templateGambar = {
+  "strip-1": "assets/strip/strip-1.png",
+  "strip-2": "assets/strip/strip-2.png",
+  "strip-3": "assets/strip/strip-3.png",
+  "strip-4": "assets/strip/strip-4.png",
+  "strip-5": "assets/strip/strip-5.png"
+};
+
+// Stiker bawaan untuk setiap template gambar
+const templateStikerBawaan = {
+  "strip-1": "assets/sticker/sticker-1.png",
+  "strip-2": "assets/sticker/sticker-2.png",
+  "strip-3": "assets/sticker/sticker-3.png",
+  "strip-4": "assets/sticker/sticker-4.png",
+  "strip-5": "assets/sticker/sticker-5.png"
+};
+
+// Untuk stiker yang diupload user (opsional, bisa emoji atau gambar custom nanti)
+let activeSticker = null;       // bisa berisi string emoji atau object { type: "image", src: "path" }
+
 function openStickerPopup() {
   document.getElementById("stickerPopup").style.display = "flex";
 }
@@ -145,31 +174,44 @@ function pilihStiker(emoji) {
   buatStrip();
 }
 
-// Fungsi menggambar stiker ke canvas
-function drawSticker(ctx, emoji, x, y, size) {
-  ctx.font = `${size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillStyle = "rgba(0,0,0,0.3)";
-  ctx.fillText(emoji, x + 2, y + 2);
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(emoji, x, y);
+function drawSticker(ctx, sticker, x, y) {
+  if (!sticker) return;
+  
+  // Jika sticker berupa object gambar PNG
+  if (sticker.type === "image") {
+    const img = new Image();
+    img.src = sticker.src;
+    // Gambar di koordinat (x, y) dengan ukuran sticker.width, sticker.height
+    // Untuk menghindari async, kita gambar langsung karena gambar mungkin belum load.
+    // Cara terbaik: load gambar di awal (cache) atau gunakan await di buatStrip.
+    // Tapi untuk kemudahan, kita gambar di sini dengan gambar yang sudah di-cache.
+    // Kita perlu pastikan gambar termuat sebelum dipanggil. Alternatif: gambar di buatStrip dengan await.
+    // Saya akan modifikasi pemanggilan di buatStrip nanti.
+    ctx.drawImage(img, x, y, sticker.width, sticker.height);
+  } 
+  // Jika sticker berupa emoji (string)
+  else if (typeof sticker === "string") {
+    ctx.font = `70px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fillText(sticker, x + 2, y + 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(sticker, x, y);
+  }
 }
 
-// Retake foto tertentu
 function retakeSlot(index) {
   stripPhotos[index] = null;
   currentSlot = index;
   buatStrip();
-  countdownEl.style.display="block";
-  countdownEl.innerText= `Retake ${index+1}`;
-  setTimeout(()=>{
-    countdownEl.style.display= "none";
-  },
-  1000);
+  countdownEl.style.display = "block";
+  countdownEl.innerText = `Retake ${index+1}`;
+  setTimeout(() => {
+    countdownEl.style.display = "none";
+  }, 1000);
 }
 
-// Fungsi utama membuat strip foto
 async function buatStrip() {
   const container = document.getElementById("hasilStrip");
   if (!container) return;
@@ -183,41 +225,59 @@ async function buatStrip() {
   canvas.width = lebar;
   canvas.height = tinggiTotal;
 
-  // 1. Background berdasarkan template
-  let bgColor, textColor;
-  switch (selectedTemplate) {
-    case "dark":
-      bgColor = "#1a1a2e";
-      textColor = "#eee";
-      break;
-    case "retro":
-      bgColor = "#f4e1c1";
-      textColor = "#6b3e1f";
-      break;
-    case "minimal":
-      bgColor = "#ffffff";
-      textColor = "#222";
-      break;
-    case "canva":
-      bgColor = "gradient";
-      textColor = "#2d3436";
-      break;
-    default:
-      bgColor = "#ffe4ec";
-      textColor = "#b34180";
-  }
-
-  if (bgColor === "gradient") {
-    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, "#fdebf7");
-    grad.addColorStop(1, "#fff3e6");
-    ctx.fillStyle = grad;
+  // Cek apakah template berupa gambar PNG dari Canva
+  if (templateGambar[selectedTemplate]) {
+    const bgImg = new Image();
+    bgImg.src = templateGambar[selectedTemplate];
+    await new Promise((resolve) => {
+      bgImg.onload = () => {
+        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        resolve();
+      };
+    });
   } else {
-    ctx.fillStyle = bgColor;
+    // Jika bukan gambar, pakai warna solid/gradien
+    let bgColor, textColor;
+    switch (selectedTemplate) {
+      case "dark":
+        bgColor = "#1a1a2e";
+        textColor = "#eee";
+        break;
+      case "retro":
+        bgColor = "#f4e1c1";
+        textColor = "#6b3e1f";
+        break;
+      case "minimal":
+        bgColor = "#ffffff";
+        textColor = "#222";
+        break;
+      case "canva":
+        bgColor = "gradient";
+        textColor = "#2d3436";
+        break;
+      default:
+        bgColor = "#ffe4ec";
+        textColor = "#b34180";
+    }
+    if (bgColor === "gradient") {
+      const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      grad.addColorStop(0, "#fdebf7");
+      grad.addColorStop(1, "#fff3e6");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    // Simpan textColor untuk digunakan nanti
+    window._tempTextColor = textColor;
   }
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Judul
+  // Gunakan textColor yang sudah disimpan, atau untuk template gambar gunakan warna putih
+  let textColor = window._tempTextColor || "#fff";
+  if (templateGambar[selectedTemplate]) textColor = "#333"; // sesuaikan
+
+  // Judul (jika template gambar, mungkin tidak perlu, tapi tetap ditulis)
   ctx.fillStyle = textColor;
   ctx.font = "bold 44px 'Poppins', sans-serif";
   ctx.textAlign = "center";
@@ -227,15 +287,26 @@ async function buatStrip() {
   for (let i = 0; i < MAX_STRIP; i++) {
     const yBase = 140 + i * (tinggiFoto + jarak);
     if (!stripPhotos[i]) {
-      // Placeholder kosong
       ctx.fillStyle = "#eeeeee";
       ctx.fillRect(50, yBase, 700, tinggiFoto);
       ctx.fillStyle = "#999";
       ctx.font = "40px 'Poppins'";
-      ctx.textAlign = "center";
       ctx.fillText("📷 Kosong", lebar / 2, yBase + tinggiFoto / 2);
       continue;
     }
+    
+    // Gambar stiker overlay (jika ada template stiker)
+if (templateStiker[selectedTemplate]) {
+  const stikerImg = new Image();
+  stikerImg.src = templateStiker[selectedTemplate];
+  await new Promise((resolve) => {
+    stikerImg.onload = () => {
+      ctx.drawImage(stikerImg, 0, 0, canvas.width, canvas.height);
+      resolve();
+    };
+  });
+}
+
     await new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
@@ -243,14 +314,8 @@ async function buatStrip() {
         const maxH = tinggiFoto - 30;
         let w = img.width;
         let h = img.height;
-        if (w > maxW) {
-          h = (h * maxW) / w;
-          w = maxW;
-        }
-        if (h > maxH) {
-          w = (w * maxH) / h;
-          h = maxH;
-        }
+        if (w > maxW) { h = (h * maxW) / w; w = maxW; }
+        if (h > maxH) { w = (w * maxH) / h; h = maxH; }
         const x = (lebar - w) / 2;
         const y = yBase + (tinggiFoto - h) / 2;
 
@@ -272,17 +337,38 @@ async function buatStrip() {
     });
   }
 
-  // 3. Stiker (jika ada) - ditempatkan di pojok kiri atas dan kanan bawah setiap frame
+  // 3. Stiker (jika ada)
   if (activeSticker) {
+  // Jika activeSticker adalah object gambar
+  if (activeSticker.type === "image") {
+    // Load gambar stiker
+    const stickerImg = new Image();
+    stickerImg.src = activeSticker.src;
+    await new Promise((resolve) => {
+      stickerImg.onload = () => {
+        // Tentukan posisi stiker (sesuai desain Canva Anda)
+        // Contoh: stiker diletakkan di pojok kanan atas setiap frame (x = 730, y = yBase + 60)
+        // Atau bisa juga hanya satu stiker besar di tengah strip? Sesuaikan.
+        for (let i = 0; i < MAX_STRIP; i++) {
+          const yBase = 140 + i * (tinggiFoto + jarak);
+          // Posisi: kanan atas frame (seperti emoji sebelumnya)
+          ctx.drawImage(stickerImg, 730, yBase + 60, activeSticker.width, activeSticker.height);
+          // Bisa juga tambah posisi lain jika perlu
+        }
+        resolve();
+      };
+    });
+  } 
+  // Jika activeSticker adalah string emoji
+  else if (typeof activeSticker === "string") {
     const ukuran = 70;
     for (let i = 0; i < MAX_STRIP; i++) {
       const yBase = 140 + i * (tinggiFoto + jarak);
-      // kiri atas
       drawSticker(ctx, activeSticker, 70, yBase + 60, ukuran);
-      // kanan bawah
       drawSticker(ctx, activeSticker, 730, yBase + tinggiFoto - 60, ukuran);
     }
   }
+}
 
   // Footer tanggal
   const today = new Date().toLocaleDateString("id-ID", {
@@ -303,25 +389,23 @@ async function buatStrip() {
   preview.className = "strip-preview";
   preview.appendChild(resultImg);
 
-// Tunggu gambar termuat agar ukuran akurat
-resultImg.onload = () => {
-  const scale = resultImg.clientHeight / canvas.height; // faktor skala tinggi
-  for (let i = 0; i < MAX_STRIP; i++) {
-    if (stripPhotos[i]) {
-      const btn = document.createElement("button");
-      btn.className = "retake-x";
-      btn.innerHTML = "✕";
-      const yBase = 140 + i * (tinggiFoto + jarak);
-      btn.style.left = (20 * scale) + "px";
-      btn.style.top = ((yBase + 10) * scale) + "px";
-      btn.onclick = () => retakeSlot(i);
-      preview.appendChild(btn);
+  resultImg.onload = () => {
+    const scale = resultImg.clientHeight / canvas.height;
+    for (let i = 0; i < MAX_STRIP; i++) {
+      if (stripPhotos[i]) {
+        const btn = document.createElement("button");
+        btn.className = "retake-x";
+        btn.innerHTML = "✕";
+        const yBase = 140 + i * (tinggiFoto + jarak);
+        btn.style.left = (20 * scale) + "px";
+        btn.style.top = ((yBase + 10) * scale) + "px";
+        btn.onclick = () => retakeSlot(i);
+        preview.appendChild(btn);
+      }
     }
-  }
-};
+  };
   container.appendChild(preview);
 
-  // Tombol download
   const downloadBtn = document.getElementById("downloadStripBtn");
   if (downloadBtn) {
     downloadBtn.onclick = () => {
@@ -333,7 +417,6 @@ resultImg.onload = () => {
   }
 }
 
-// Fungsi ambil foto (takeFoto) yang sudah dimodifikasi untuk strip
 async function takeFoto() {
   if (isTakingPhoto) return;
   isTakingPhoto = true;
@@ -372,7 +455,6 @@ async function takeFoto() {
       context.drawImage(video, 0, 0);
       const imageData = canvas.toDataURL("image/png");
 
-      // Simpan langsung ke strip
       if (currentSlot >= MAX_STRIP) {
         alert("Semua frame terisi. Gunakan retake.");
         isTakingPhoto = false;
@@ -387,7 +469,6 @@ async function takeFoto() {
     }
   }, 1000);
 }
-
 
 // ===================================
 // TEMA WEBSITE (Global)
@@ -408,11 +489,9 @@ function pilihTema(tema) {
   }
   closeTemaPopup();
 }
-// Set tema default pink
 document.body.classList.add("tema-pink");
 
-
-// ========== UPLOAD GAMBAR DARI GALERI (LANGSUNG KE STRIP) ==========
+// ========== UPLOAD GAMBAR ==========
 const uploadBtn = document.getElementById("uploadBtn");
 const fileInput = document.getElementById("fileInput");
 
@@ -444,3 +523,106 @@ fileInput.addEventListener("change", (event) => {
   reader.readAsDataURL(file);
   fileInput.value = "";
 });
+
+// ========== THUMBNAIL TEMPLATE (PREVIEW GAMBAR) ==========
+const templateList = [
+  { id: "pink", label: "🌸 Pink", bg: "#ffe4ec", text: "#b34180" },
+  { id: "dark", label: "🖤 Dark", bg: "#1a1a2e", text: "#eee" },
+  { id: "retro", label: "📼 Retro", bg: "#f4e1c1", text: "#6b3e1f" },
+  { id: "minimal", label: "🤍 Minimal", bg: "#ffffff", text: "#222" }
+];
+
+// Fungsi membuat thumbnail (gambar kecil) untuk suatu template
+async function buatThumbnail(templateId, width = 120, height = 200) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  let bgColor, textColor;
+  switch (templateId) {
+    case "dark":
+      bgColor = "#1a1a2e";
+      textColor = "#eee";
+      break;
+    case "retro":
+      bgColor = "#f4e1c1";
+      textColor = "#6b3e1f";
+      break;
+    case "minimal":
+      bgColor = "#ffffff";
+      textColor = "#222";
+      break;
+    default:
+      bgColor = "#ffe4ec";
+      textColor = "#b34180";
+  }
+
+  if (bgColor === "gradient") {
+    const grad = ctx.createLinearGradient(0, 0, 0, height);
+    grad.addColorStop(0, "#fdebf7");
+    grad.addColorStop(1, "#fff3e6");
+    ctx.fillStyle = grad;
+  } else {
+    ctx.fillStyle = bgColor;
+  }
+  ctx.fillRect(0, 0, width, height);
+
+  // Judul kecil
+  ctx.fillStyle = textColor;
+  ctx.font = "bold 10px 'Poppins'";
+  ctx.textAlign = "center";
+  ctx.fillText("PoseBox", width/2, 15);
+
+  // 3 kotak foto kecil
+  const boxW = width - 16;
+  const boxH = 38;
+  const gap = 5;
+  for (let i = 0; i < 3; i++) {
+    const y = 28 + i * (boxH + gap);
+    ctx.fillStyle = "#dddddd";
+    ctx.fillRect(8, y, boxW, boxH);
+    ctx.fillStyle = "#999";
+    ctx.font = "10px 'Poppins'";
+    ctx.fillText("📷", width/2, y + boxH/2 + 2);
+  }
+
+  return canvas.toDataURL();
+}
+
+// Ubah fungsi openTemplatePopup agar menampilkan thumbnail di tombol
+async function openTemplatePopup() {
+  const popup = document.getElementById("templatePopup");
+  if (!popup) return;
+  popup.style.display = "flex";
+  
+  const content = popup.querySelector(".popup-content");
+  if (!content) return;
+  
+  // Cari semua tombol template (kecuali tombol "Tutup")
+  const buttons = content.querySelectorAll("button:not(:last-child)");
+  
+  for (let i = 0; i < buttons.length; i++) {
+    const btn = buttons[i];
+    const tpl = templateList[i];
+    if (tpl) {
+      const thumbData = await buatThumbnail(tpl.id);
+      // Simpan teks asli
+      const originalText = btn.innerText;
+      btn.style.display = "flex";
+      btn.style.flexDirection = "column";
+      btn.style.alignItems = "center";
+      btn.style.gap = "5px";
+      btn.style.padding = "8px";
+      btn.innerHTML = `
+        <img src="${thumbData}" style="width:80px; height:auto; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        <span style="font-size:0.8rem;">${originalText}</span>
+      `;
+    }
+  }
+}
+
+// Fungsi closeTemplate tetap sama
+function closeTemplate() {
+  document.getElementById("templatePopup").style.display = "none";
+}

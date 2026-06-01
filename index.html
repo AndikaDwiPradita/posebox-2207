@@ -107,6 +107,24 @@
       <button onclick="setFilter('blur(2px)')">
         Blur
       </button>
+      <button onclick="setFilter('brightness(1.05) contrast(1.1) saturate(1.2) hue-rotate(-10deg)')">
+        🌸 Soft Pink
+      </button>
+      <button onclick="setFilter('sepia(0.5) saturate(1.4) brightness(1.05)')">
+        🌅 Warm Sunset
+      </button>
+      <button onclick="setFilter('brightness(1.02) contrast(1.05) saturate(1.1) hue-rotate(10deg)')">
+        💙 Cool Blue
+      </button>
+      <button onclick="setFilter('sepia(0.6) contrast(1.2) brightness(0.95)')">
+        📼 Vintage Warm
+      </button>
+      <button onclick="setFilter('contrast(1.4) brightness(1.05) saturate(1.2)')">
+        ⚡ High Contrast
+      </button>
+      <button onclick="setFilter('blur(1px) brightness(1.05) saturate(1.1)')">
+        ☁️ Dreamy
+      </button>
     </div>
     <button id="closeFilterPopup">
       Tutup
@@ -115,13 +133,20 @@
 </div>
         
         <div id="templatePopup" class="popup">
-          <div class="popup-content">
+          <div class="popup-content" style="width: 320px;">
             <h2>Pilih Background Strip</h2>
-            <button onclick="pilihTemplate('pink')">🌸 Pink</button>
-            <button onclick="pilihTemplate('dark')">🖤 Dark</button>
-            <button onclick="pilihTemplate('retro')">📼 Retro</button>
-            <button onclick="pilihTemplate('minimal')">🤍 Minimal</button>
-            <button onclick="pilihTemplate('canva')">🎨 Canva Gradient</button>
+            <div id="templateGrid" class="template-grid">
+              <button onclick="pilihTemplate('pink')">🌸 Pink</button>
+              <button onclick="pilihTemplate('dark')">🖤 Dark</button>
+              <button onclick="pilihTemplate('retro')">📼 Retro</button>
+              <button onclick="pilihTemplate('minimal')">🤍 Minimal</button>
+              <button onclick="pilihTemplate('strip-1')"></button>
+              <button onclick="pilihTemplate('strip-2')"></button>
+              <button onclick="pilihTemplate('strip-3')">
+                </button>
+              <button onclick="pilihTemplate('strip-4')"></button>
+              <button onclick="pilihTemplate('strip-5')"></button>
+            </div>
             <button onclick="closeTemplate()">Tutup</button>
           </div>
         </div>
