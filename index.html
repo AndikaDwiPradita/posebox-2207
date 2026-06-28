@@ -1,19 +1,44 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pose Box</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pose Box</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
   
-  <body>
-    <nav class="navbar">
-      <h1 class="logo">Pose<span>Box</span></h1>
-    </nav>
-    
-    <main>
+  <header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <span>Pose<span style="font-weight: normal;">Box</span></span>
+    </a>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger"><span></span></label>
+    <ul class="menu">
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Poto Kamu</a></li>
+      <li></li>
+      <li></li>
+      <li id="authSection">
+        <button class="nav-btn login-btn" onclick="openLoginPopup()">Login</button>
+        <button class="nav-btn register-btn" onclick="openRegisterPopup()">Daftar</button>
+        <button class="nav-btn logout-btn" onclick="logout()" style="display:none;">Logout</button>
+      </li>
+      <li id="userSection" style="display:none;">
+        <div class="user-info-nav">
+          <img id="navAvatar" src="assets/default-avatar.png" class="nav-avatar">
+          <span id="navUserName"></span>
+          <span id="navUserRole" class="user-role-badge"></span>
+          <button class="nav-btn logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<main>
       <div class="content-wrapper">
         <div class="posebox">
           <h1>Jepretkan Momen Mu</h1>
@@ -36,7 +61,6 @@
           <section class="fitur">
              <div class="button-fitur">
               <button onclick="openTemplatePopup()"><i class="fa-solid fa-border-all"></i><p>Template</p></button>
-              <button onclick="openStickerPopup()"><i class="fa-regular fa-face-smile"></i><p>Stiker</p></button>
               <button onclick="openFilterPopup()"><i class="fa-solid fa-wand-magic-sparkles"></i><p>Efek</p></button>
               <button onclick="openTemaPopup()"><i class="fa-solid fa-palette"></i><p>Tema</p></button>
             </div>
@@ -76,7 +100,6 @@
               <span class="slider"></span>
             </label>
           </div>
-          <button id="closePopup">Tutup</button>
         </div>
       </div>
       <!-- FLASH EFFECT -->
@@ -126,9 +149,6 @@
         ☁️ Dreamy
       </button>
     </div>
-    <button id="closeFilterPopup">
-      Tutup
-    </button>
   </div>
 </div>
         
@@ -147,38 +167,17 @@
               <button onclick="pilihTemplate('strip-4')"></button>
               <button onclick="pilihTemplate('strip-5')"></button>
             </div>
-            <button onclick="closeTemplate()">Tutup</button>
           </div>
         </div>
         
-        <div id="stickerPopup" class="popup">
-          <div class="popup-content">
-            <h2>Pilih Stiker (hanya satu aktif)</h2>
-            <div class="sticker-list" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-              <button onclick="pilihStiker('📸')">📸</button>
-              <button onclick="pilihStiker('✨')">✨ </button>
-              <button onclick="pilihStiker('💖')">💖</button>
-              <button onclick="pilihStiker('⭐')">⭐ <utton>
-              <button onclick="pilihStiker('🎨')">🎨</button>
-              <button onclick="pilihStiker('❤️')">❤️</button>
-              <button onclick="pilihStiker('😊')">😊</button>
-              <button onclick="pilihStiker('🎉')">🎉</button>
-              <button onclick="pilihStiker('🌸')">🌸</button>
-              <button onclick="pilihStiker('🦄')">🦄</button>
-            </div>
-            <button id="closeStickerPopup" style="margin-top: 15px;">Tutup</button>
-          </div>
-        </div>
         
         <div id="temaPopup" class="popup">
           <div class="popup-content">
             <h2>Pilih Tema Website</h2>
             <button onclick="pilihTema('pink')">🌸 Pink (Default)</button>
             <button onclick="pilihTema('creammaroon')">🤎 Cream + Maroon</button>
-            <button onclick="closeTemaPopup()">Tutup</button>
           </div>
         </div>
-        
     </main>
     <script src="script.js"></script>
   </body>

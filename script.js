@@ -77,10 +77,6 @@ function settings() {
   popup.style.display = "flex";
 }
 
-document.getElementById("closePopup").onclick = () => {
-  popup.style.display = "none";
-};
-
 flashToggle.addEventListener("change", () => {
   flashEnabled = flashToggle.checked;
 });
@@ -98,12 +94,10 @@ function openFilterPopup() {
   filterPopup.style.display = "flex";
 }
 
-document.getElementById("closeFilterPopup").onclick = () => {
-  filterPopup.style.display = "none";
-};
 
 function setFilter(filter) {
   video.style.filter = filter;
+  document.getElementById("filterPopup").style.display = "none"; // langsung tutup
 }
 
 /* ===================================
@@ -118,9 +112,6 @@ let currentSlot = 0;
 function openTemplatePopup() {
   document.getElementById("templatePopup").style.display = "flex";
 }
-function closeTemplate() {
-  document.getElementById("templatePopup").style.display = "none";
-}
 function pilihTemplate(nama) {
   selectedTemplate = nama;
   
@@ -133,8 +124,6 @@ function pilihTemplate(nama) {
       height: 80   // sesuaikan
     };
   } else {
-    // Jika tidak ada stiker bawaan, biarkan activeSticker seperti sebelumnya (atau null)
-    // activeSticker = null; // hati-hati jangan hapus pilihan user sebelumnya
   }
   
   closeTemplate();
@@ -169,33 +158,7 @@ const templateStiker = {
 };
 
 // Untuk stiker yang diupload user (opsional, bisa emoji atau gambar custom nanti)
-let activeSticker = null;
 
-function openStickerPopup() {
-  document.getElementById("stickerPopup").style.display = "flex";
-}
-document.getElementById("closeStickerPopup").onclick = () => {
-  document.getElementById("stickerPopup").style.display = "none";
-};
-function pilihStiker(emoji) {
-  activeSticker = emoji;
-  document.getElementById("stickerPopup").style.display = "none";
-  buatStrip();
-}
-
-function drawSticker(ctx, sticker, x, y, size = 70) {
-  if (!sticker) return;
-  
-  if (typeof sticker === "string") {
-    ctx.font = `${size}px "Segoe UI Emoji", "Apple Color Emoji", sans-serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "rgba(0,0,0,0.3)";
-    ctx.fillText(sticker, x + 2, y + 2);
-    ctx.fillStyle = "#ffffff";
-    ctx.fillText(sticker, x, y);
-  }
-}
 
 function retakeSlot(index) {
   stripPhotos[index] = null;
@@ -304,13 +267,7 @@ async function buatStrip() {
     });
   }
 
-  // 4. Stiker emoji (jika ada) - opsional
-  if (activeSticker && typeof activeSticker === "string") {
-    for (let i = 0; i < MAX_STRIP; i++) {
-      const yBase = 140 + i * (tinggiFoto + jarak);
-      drawSticker(ctx, activeSticker, 730, yBase + tinggiFoto - 60);
-    }
-  }
+// 4. Stiker emoji (jika ada) - di kiri atas & kanan bawah tiap frame
 
   // 5. Footer tanggal
   const today = new Date().toLocaleDateString("id-ID", {
@@ -423,9 +380,7 @@ async function takeFoto() {
 function openTemaPopup() {
   document.getElementById("temaPopup").style.display = "flex";
 }
-function closeTemaPopup() {
-  document.getElementById("temaPopup").style.display = "none";
-}
+
 function pilihTema(tema) {
   if (tema === "creammaroon") {
     document.body.classList.add("tema-creammaroon");
@@ -603,3 +558,15 @@ async function openTemplatePopup() {
 function closeTemplate() {
   document.getElementById("templatePopup").style.display = "none";
 }
+
+// ==========================================
+// TUTUP POPUP DENGAN KLIK DI LUAR
+// ==========================================
+document.querySelectorAll('.popup').forEach(popup => {
+  popup.addEventListener('click', function(e) {
+    // Jika yang diklik adalah background popup (bukan kontennya)
+    if (e.target === this) {
+      this.style.display = 'none';
+    }
+  });
+});

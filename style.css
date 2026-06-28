@@ -15,17 +15,324 @@ body {
 }
 
 /* ========================================
-  Navigation Bar
+   NAVBAR POSEBOX
 ======================================== */
-.navbar {
-  padding: 20px;
-  background-color: pink;
+.nav {
+  position: sticky;
+  top: 0;
+  padding: clamp(0.5rem, 1vw + 0.2rem, 1rem) clamp(1rem, 2vw + 0.5rem, 3rem);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+  transition: background 0.3s ease;
 }
 
-.navbar h1 {
+/* Tema Pink (default) */
+body.tema-pink .nav {
+  background: linear-gradient(180deg, #ffb3c6, #ff9eb5);
+}
+
+/* Tema Cream Maroon */
+body.tema-creammaroon .nav {
+  background: #800020; /* maroon solid, tanpa shadow */
+}
+
+.nav-inner {
+  max-width: 1600px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 0.5rem);
+  color: white;
+  text-decoration: none;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700;
+}
+
+.logo-img {
+  width: clamp(40px, 4vw, 48px);
+  height: clamp(40px, 4vw, 48px);
+  border-radius: 12px;
+}
+
+/* Menu */
+.menu {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 1vw, 1.5rem);
+  list-style: none;
+}
+
+.menu a {
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  font-size: clamp(0.9rem, 0.9vw, 1.05rem);
+  font-weight: 500;
+  color: white;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.menu a:hover,
+.menu a.active {
+  text-shadow: 0 0 10px white;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+}
+
+/* Nav Buttons (Login/Register/Logout) */
+#authButtonsMenu {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+/* Tema Pink - tombol */
+body.tema-pink .login-btn {
+  background: white;
+  color: #b34180;
+}
+body.tema-pink .login-btn:hover {
+  background: #ffe0f0;
+}
+body.tema-pink .register-btn {
+  background: #ff99cc;
+  color: white;
+}
+body.tema-pink .register-btn:hover {
+  background: #ff80b5;
+}
+body.tema-pink .logout-btn {
+  background: #800020;
   color: white;
 }
 
+/* Tema Cream Maroon - tombol */
+body.tema-creammaroon .login-btn {
+  background: #FFF8E7;
+  color: #800020;
+}
+body.tema-creammaroon .login-btn:hover {
+  background: #ffe6d5;
+}
+body.tema-creammaroon .register-btn {
+  background: #a02840;
+  color: #FFF8E7;
+}
+body.tema-creammaroon .register-btn:hover {
+  background: #b83850;
+}
+body.tema-creammaroon .logout-btn {
+  background: #FFF8E7;
+  color: #800020;
+}
+body.tema-creammaroon .logout-btn:hover {
+  background: #ffe6d5;
+}
+
+/* User Info (setelah login) */
+.user-info-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 40px;
+}
+
+body.tema-creammaroon .user-info-nav {
+  background: rgba(255, 248, 231, 0.25);
+}
+
+.nav-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.user-role-badge {
+  font-size: 0.7rem;
+  background: #ff99cc;
+  padding: 2px 8px;
+  border-radius: 20px;
+  color: white;
+}
+
+body.tema-creammaroon .user-role-badge {
+  background: #a02840;
+  color: #FFF8E7;
+}
+
+/* Hamburger */
+.menu-toggle {
+  display: none;
+}
+
+.hamburger {
+  display: none;
+  width: clamp(40px, 6vw, 45px);
+  height: clamp(40px, 6vw, 45px);
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.hamburger span,
+.hamburger span::before,
+.hamburger span::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: white;
+  position: relative;
+  transition: 0.25s;
+  content: "";
+}
+
+.hamburger span::before {
+  position: absolute;
+  top: -6px;
+}
+
+.hamburger span::after {
+  position: absolute;
+  top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 200, 220, 0.95);
+    backdrop-filter: blur(12px);
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  body.tema-creammaroon .menu {
+    background: rgba(128, 0, 32, 0.95);
+  }
+
+  .menu li {
+    width: 90%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .menu a {
+    color: #b34180;
+    font-weight: bold;
+  }
+
+  body.tema-creammaroon .menu a {
+    color: #FFF8E7;
+  }
+
+  #authButtonsMenu {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .user-info-nav {
+    width: 90%;
+    justify-content: center;
+  }
+
+  .menu-toggle:checked ~ .menu {
+    max-height: 100vh;
+    padding: 1.5rem 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .menu-toggle:checked ~ .hamburger span {
+    background: transparent;
+  }
+
+  .menu-toggle:checked ~ .hamburger span::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .menu-toggle:checked ~ .hamburger span::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+}
+
+#authSection {
+  display: flex;
+  gap: 8px;
+}
+
+#userSection {
+  display: none;
+}
+
+.user-info-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 5px 12px;
+  border-radius: 40px;
+}
+
+@media (max-width: 900px) {
+  #authSection {
+    flex-direction: column;
+    width: 90%;
+  }
+  
+  #userSection {
+    width: 90%;
+  }
+  
+  .user-info-nav {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
 /* ========================================
    Main Layouting
 ======================================== */
@@ -366,19 +673,7 @@ aside {
   background: #ff77aa;
   transform: scale(1.02);
 }
-.sticker-list button {
-  font-size: 2rem;
-  padding: 10px;
-  background: #f0f0f0;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.sticker-list button:hover {
-  background: pink;
-  transform: scale(1.05);
-}
+
 
 .strip-preview{
   position:relative;
@@ -575,10 +870,6 @@ body.tema-creammaroon .hapus-btn {
 }
 body.tema-creammaroon .retake-x {
   background: #800020;
-}
-body.tema-creammaroon .sticker-list button:hover {
-  background: #800020;
-  color: white;
 }
 body.tema-creammaroon .filter-list button {
   background: #FFF8E7;
