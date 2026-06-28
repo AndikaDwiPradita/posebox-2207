@@ -1,9 +1,4 @@
 // ==========================================
-// KONFIGURASI API LARAVEL
-// ==========================================
-const API_URL = 'http://10.35.69.190:8000/api'; // Ganti dengan IP Termux kamu
-
-// ==========================================
 // DOM ELEMENTS
 // ==========================================
 let usernameRef = document.getElementById("username");
@@ -14,7 +9,7 @@ let handL = document.querySelector(".hand-l");
 let handR = document.querySelector(".hand-r");
 
 // ==========================================
-// ANIMASI PANDA (tetap sama)
+// ANIMASI PANDA
 // ==========================================
 let normalEyeStyle = () => {
   eyeL.style.cssText = `left:0.6em; top: 0.6em;`;
@@ -47,68 +42,37 @@ document.addEventListener("click", (e) => {
 });
 
 // ==========================================
-// LOGIN FUNCTION (PAKAI API LARAVEL)
-// ==========================================
-async function loginUser(email, password) {
-    try {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        
-        const data = await response.json();
-        
-        if (data.status) {
-            // Simpan token & user ke localStorage
-            localStorage.setItem('token', data.data.token);
-            localStorage.setItem('user', JSON.stringify(data.data.user));
-            localStorage.setItem('role', data.data.role);
-            
-            alert('Login berhasil!');
-            
-            // Redirect ke halaman utama PoseBox
-            window.location.href = 'index.html';
-            return true;
-        } else {
-            alert(data.message || 'Login gagal!');
-            return false;
-        }
-    } catch (error) {
-        alert('Error: ' + error.message);
-        return false;
-    }
-}
-
-// ==========================================
 // SUBMIT LOGIN FORM
 // ==========================================
 document.getElementById("loginForm").addEventListener("submit", function (event) {
-    event.preventDefault();
+  event.preventDefault();
 
-    const email = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
 
-    if (!email || !password) {
-        alert("Email dan password harus diisi!");
-        return;
-    }
+  if (!username || !password) {
+    alert("Username dan password harus diisi!");
+    return;
+  }
 
-    loginUser(email, password);
+  // ========== KAMU TARUH LOGIKA LOGIN SENDIRI DI SINI ==========
+  // Contoh: window.location.href = 'index.html';
+  alert("Login berhasil! (masih simulasi)");
+  window.location.href = "index.html";
 });
 
 // ==========================================
-// REGISTER LINK (redirect ke halaman register)
+// REGISTER LINK
 // ==========================================
 document.getElementById("registerLink").addEventListener("click", function(e) {
-    e.preventDefault();
-    window.location.href = 'register.html';
+  e.preventDefault();
+  window.location.href = "register.html";
 });
 
 // ==========================================
-// FORGOT PASSWORD (opsional)
+// FORGOT PASSWORD
 // ==========================================
 document.getElementById("forgotPassword").addEventListener("click", function(e) {
-    e.preventDefault();
-    alert("Fitur reset password akan segera hadir!");
+  e.preventDefault();
+  alert("Fitur reset password akan segera hadir!");
 });
